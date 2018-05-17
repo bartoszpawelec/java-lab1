@@ -18,7 +18,7 @@ class ProjectManger
           if (cmd.trim().equals("quit"))
               break;
 
-          Reader.Do(cmd, projects);
+          Reader.Do(cmd, projects,members);
       }
     }
 }

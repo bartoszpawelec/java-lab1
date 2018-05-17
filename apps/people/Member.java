@@ -13,6 +13,16 @@ public class Member
     email = e;
   }
 
+  public String getName() {
+    return firstName + lastName;
+  }
+
+  public void setName(String firstName, String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+
   public String toString()
   {
     return firstName + " " + lastName + " (" + email + ")";
