@@ -5,9 +5,10 @@ import java.util.*;
 
 public class Project extends Base
 {
-  private ArrayList<Task> tasks;
-  private ArrayList<Member> members;
-
+  public ArrayList<Task> tasks;
+  public ArrayList<Member> members;
+  public int id;
+  
   public Project(String t)
   {
     super(t);
@@ -24,6 +25,13 @@ public class Project extends Base
   {
     members.add(m);
   }
+  
+  public void showTask () {
+      for(Task t : tasks)
+          System.out.println(t);
+  }
+  
+
 
   public String toString()
   {

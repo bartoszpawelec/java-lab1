@@ -4,6 +4,7 @@ import apps.people.Member;
 
 public class Task extends Base
 {
+    public int id;
 
   private Member executor;
 
@@ -27,5 +28,11 @@ public class Task extends Base
   {
     return executor;
   }
+
+  public String toString() {
+      return "Task name: " + getTitle();
+  }
+  
 }
+
 
