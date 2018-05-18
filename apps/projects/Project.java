@@ -29,6 +29,11 @@ public class Project extends Base
       for(Task t : tasks)
           System.out.println(t);
   }
+
+  public void showMembers () {
+    for(Member m : members)
+      System.out.println(m);
+  }
   
   public String toString() {
     String out = "Project title: " + getTitle();

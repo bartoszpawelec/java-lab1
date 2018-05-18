@@ -47,7 +47,13 @@ public class Reader {
 		    	members.add(new Member(Line[2], Line[3], Line[4]));
 				break;
 			
-				
+			case "person_to_project":
+				for(Project p : projects){
+					if(p.getTitle().equals(Line[5]))
+						p.addMember(new Member(Line[2],Line[3],Line[4]));
+				}
+				break;
+
 		    case "task":
 		    	
 		    	for (Project p : projects) { 
@@ -55,6 +61,7 @@ public class Reader {
 		    			p.addTask(new Task(Line[2]));
                 }
                 break;
+
 		    default: {
 		        System.out.println("Error!");
                 break;
@@ -144,9 +151,15 @@ public class Reader {
 			for (Member m : members) {
 				System.out.println(m);
 			}
-	
 			break;
-		
+
+			case "members":
+				for (Project p : projects) {
+					if (p.getTitle().equals(Line[2]))
+						p.showMembers();
+				}
+				break;
+
 		case "task":
 			 for (Project p : projects)  {
                  if (p.getTitle().equals(Line[2]))
