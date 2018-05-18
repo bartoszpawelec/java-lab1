@@ -16,13 +16,22 @@ public class Project extends Base
     members = new ArrayList<>();
   }
 
-  public void addTask(Task t)
-  {
+  public Project(String t, String name) {
+    super(t);
+    tasks = new ArrayList<>();
+    members = new ArrayList<>();
+    this.name = name;
+  }
+
+  public String getName(int id) {
+    return name;
+  }
+
+  public void addTask(Task t) {
     tasks.add(t);
   }
 
-  public void addMember(Member m)
-  {
+  public void addMember(Member m) {
     members.add(m);
   }
   
@@ -31,10 +40,7 @@ public class Project extends Base
           System.out.println(t);
   }
   
-
-
-  public String toString()
-  {
+  public String toString() {
     String out = "Project title: " + getTitle();
     return out;
   }

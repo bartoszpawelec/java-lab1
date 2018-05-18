@@ -13,7 +13,6 @@ public class Member
     email = e;
   }
 
-
   public String getName() {
     return firstName + lastName;
   }
@@ -22,7 +21,7 @@ public class Member
     this.firstName = firstName;
     this.lastName = lastName;
   }
-  
+
   public String toString()
   {
     return firstName + " " + lastName + " (" + email + ")";

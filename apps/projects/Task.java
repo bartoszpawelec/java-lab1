@@ -8,6 +8,7 @@ public class Task extends Base
 
   private Member executor;
 
+
   public Task(String t)
   {
     super(t);

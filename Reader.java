@@ -1,9 +1,11 @@
+import java.lang.reflect.Array;
 import java.util.*;
 import apps.projects.Task;
 import apps.people.Member;
 import apps.projects.Project;
 
 public class Reader {
+
     public static String[] Line;
     
 	public static void Do(String s, ArrayList<Project> projects, ArrayList<Member> members){
@@ -156,7 +158,6 @@ public class Reader {
 		default:
 			System.out.println("Error!");
             break;	
-			
+		}
 	}
-}
 }
