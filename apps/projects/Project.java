@@ -16,16 +16,6 @@ public class Project extends Base
     members = new ArrayList<>();
   }
 
-  public Project(String t, String name) {
-    super(t);
-    tasks = new ArrayList<>();
-    members = new ArrayList<>();
-    this.name = name;
-  }
-
-  public String getName(int id) {
-    return name;
-  }
 
   public void addTask(Task t) {
     tasks.add(t);
