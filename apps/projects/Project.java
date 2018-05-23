@@ -7,7 +7,6 @@ public class Project extends Base
 {
   public ArrayList<Task> tasks;
   public ArrayList<Member> members;
-  public int id;
   
   public Project(String t)
   {

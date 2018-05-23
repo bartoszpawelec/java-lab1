@@ -1,15 +1,21 @@
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.*;
 import apps.projects.Task;
 import apps.people.Member;
 import apps.projects.Project;
-
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.File;
+import java.util.Scanner;
+import java.time.LocalDate;
 public class Reader {
 
     public static String[] Line;
     
 	public static void Do(String s, ArrayList<Project> projects, ArrayList<Member> members){
-		 
+		 	
 	        Line = s.split(" ");
 
 	        switch (Line[0]) {
@@ -25,9 +31,16 @@ public class Reader {
 	            	modify(projects,members);
 	            	break;
 	            	
-	            	
 	            case "delete":
 	            	delete(projects,members);
+	            	break;
+	            	
+	            case "export":
+	            	export(projects, members);
+	            	break;
+	    
+	            case "import":
+	            	read(projects, members);
 	            	break;
 	            	
 	            default: {
@@ -35,6 +48,39 @@ public class Reader {
 	                break;
 	            }
 	        }
+		 	
+	}
+	
+	public static void export(ArrayList<Project> projects, ArrayList<Member> members){
+		
+		try {
+			PrintWriter zapis = new PrintWriter(Line[1]);
+			
+			for (Project p : projects) {
+		    	zapis.println(p.getTitle());
+		    }
+		/*
+			for (Member m : members) {
+				zapis.println(m.getName());
+			}
+			*/
+			zapis.close();
+			
+		}catch(FileNotFoundException ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	public static void read(ArrayList<Project> projects, ArrayList<Member> members) {
+		try {
+			File plik = new File(Line[1]);
+			Scanner in = new Scanner(plik);
+			projects.add(new Project(in.nextLine()));
+			in.close();
+		}catch(FileNotFoundException ex){
+			ex.printStackTrace();
+		}
+		
 	}
 	
 	public static void add(ArrayList<Project> projects, ArrayList<Member> members) {
@@ -48,17 +94,39 @@ public class Reader {
 				break;
 			
 			case "person_to_project":
+				int id = Integer.parseInt(Line[2]);
+		    	Member memberToAdd = members.get(id);
+		    	
 				for(Project p : projects){
-					if(p.getTitle().equals(Line[5]))
-						p.addMember(new Member(Line[2],Line[3],Line[4]));
+					if(p.getTitle().equals(Line[3]))
+						p.addMember(memberToAdd);
 				}
 				break;
 
-		    case "task":
+			case "person_to_task":
+				int mid = Integer.parseInt(Line[2]);
+		    	Member memberToAddToTask = members.get(mid);
 		    	
+				for(Project p : projects){
+					if(p.getTitle().equals(Line[3])) {
+						p.addMember(memberToAddToTask);
+						for(Task t : p.tasks) {
+							if(t.getTitle().equals(Line[4])) {
+								t.addMember(memberToAddToTask);
+							}
+						}	
+					}
+				}
+				break;
+
+				
+			
+				
+		    case "task":
+		    	LocalDate localDate = LocalDate.parse(Line[4]);
 		    	for (Project p : projects) { 
                     if(p.getTitle().equals(Line[3]))
-		    			p.addTask(new Task(Line[2]));
+		    			p.addTask(new Task(Line[2],localDate));
                 }
                 break;
 
@@ -153,18 +221,37 @@ public class Reader {
 			}
 			break;
 
-			case "members":
-				for (Project p : projects) {
-					if (p.getTitle().equals(Line[2]))
-						p.showMembers();
-				}
-				break;
+		case "members_of_project":
+			for (Project p : projects) {
+				if (p.getTitle().equals(Line[2]))
+					p.showMembers();
+			}
+			break;
 
+		case "assign_to_task":
+			for(Project p : projects){
+				if(p.getTitle().equals(Line[2])) {
+					for(Task t : p.tasks) {
+						if(t.getTitle().equals(Line[3])) {
+							t.showMembers();
+						}
+					}	
+				}
+			}
+		
+			break;
+
+			
+			
 		case "task":
-			 for (Project p : projects)  {
-                 if (p.getTitle().equals(Line[2]))
-                     p.showTask();
-			 }
+			if(Line[2].equals("asc")) {
+				for (Project p : projects)  {
+	                 if (p.getTitle().equals(Line[3]))
+	     				Collections.sort(p.tasks);
+	                	 p.showTask();
+				 }	
+			}
+			 
 			 break;
 
          
