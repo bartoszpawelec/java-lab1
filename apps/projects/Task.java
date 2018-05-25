@@ -11,6 +11,7 @@ public class Task extends Base implements Comparable<Task>, Serializable {
 	private Member executor;
 	LocalDate finishDate;
 
+
 	public ArrayList<Member> members;
 
 	public Task(String t) {
@@ -43,6 +44,7 @@ public class Task extends Base implements Comparable<Task>, Serializable {
 		for (Member m : members)
 			System.out.println(m);
 	}
+
 
 	public void assigTo(Member to) {
 		executor = to;

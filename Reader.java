@@ -14,10 +14,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Reader {
 
 	public static String[] Line;
+
 
 	public static void Do(String s, ArrayList<Project> projects, ArrayList<Member> members) {
 
@@ -262,6 +264,8 @@ public class Reader {
 			break;
 
 		case "task":
+			LocalDate today = LocalDate.now();
+
 			if (Line[2].equals("asc")) {
 				for (Project p : projects) {
 					if (p.getTitle().equals(Line[3]))
@@ -270,13 +274,28 @@ public class Reader {
 				}
 			
 			}
-			else if (Line[2].equals("desc")) {
-				
-			}
-			else if (Line[2].equals("tardy")) {
-			}
-				
 
+			else if (Line[2].equals("desc")) {
+				for (Project p : projects) {
+					if (p.getTitle().equals(Line[3]))
+						Collections.sort(p.tasks);
+						Collections.reverse(p.tasks);
+					p.showTask();
+				}
+			}
+			
+			else if (Line[2].equals("tardy")) {
+
+				for (Project p : projects) {
+					if (p.getTitle().equals(Line[3]))
+						for (Task t : p.tasks) {
+							if (today.isAfter((t.getDate()))) {
+								System.out.println(t.toString());
+						}
+
+					}
+				}
+			}
 			break;
 
 		default:
