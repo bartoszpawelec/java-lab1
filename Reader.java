@@ -20,7 +20,7 @@ public class Reader {
 
 	public static String[] Line;
 
-	public static void Do(String s, ArrayList<Project> projects, ArrayList<Member> members) throws OwnException {
+	public static void Do(String s, ArrayList<Project> projects, ArrayList<Member> members) {
 		try {
 			Line = s.split(" ");
 
@@ -113,64 +113,73 @@ public class Reader {
 	public static void add(ArrayList<Project> projects, ArrayList<Member> members) throws OwnException {
 		switch (Line[1]) {
 		case "project":
-			projects.add(new Project(Line[2]));
-			if (Line[2].isEmpty())
-				throw new OwnException("project name");
+			try {
+				projects.add(new Project(Line[2]));
+			}catch(ArrayIndexOutOfBoundsException e) {
+				System.out.println("Blad: Nie podano nazwy projektu!");
+			}
+
 			break;
 
 		case "person":
-			members.add(new Member(Line[2], Line[3], Line[4]));
-			if (Line[2].isEmpty())
-				throw new OwnException("name");
-
-			if (Line[3].isEmpty())
-				throw new OwnException("surname");
-
-			if (Line[4].isEmpty())
-				throw new OwnException("email");
+			try {
+				members.add(new Member(Line[2], Line[3], Line[4]));
+			}catch(ArrayIndexOutOfBoundsException e) {
+				System.out.println("Blad: Brakuje danych o osobie!");
+			}
 
 			break;
 
 		case "person_to_project":
-			int id = Integer.parseInt(Line[2]);
+			try {
+				int id = Integer.parseInt(Line[2]);
 
-			for (Project p : projects) {
-				if (p.getTitle().equals(Line[3]))
-					for (Member m : members)
-						if (m.getId() == id)
-							p.addMember(m);
+				for (Project p : projects) {
+					if (p.getTitle().equals(Line[3]))
+						for (Member m : members)
+							if (m.getId() == id)
+								p.addMember(m);
+				}
+			}catch(ArrayIndexOutOfBoundsException e){
+				System.out.println("Blad: Brakuje nazwy projektu lub ID osoby" );
 			}
 			break;
 
 		case "person_to_task":
-			int mid = Integer.parseInt(Line[2]);
+			try {
+				int mid = Integer.parseInt(Line[2]);
 
-			for (Project p : projects) {
-				if (p.getTitle().equals(Line[3])) {
-					for (Member m : members)
-						if (m.getId() == mid)
-							p.addMember(m);
-					for (Task t : p.tasks) {
-						if (t.getTitle().equals(Line[4])) {
-							for (Member m : p.members)
-								if (m.getId() == mid)
-									t.addMember(m);
+				for (Project p : projects) {
+					if (p.getTitle().equals(Line[3])) {
+						for (Member m : members)
+							if (m.getId() == mid)
+								p.addMember(m);
+						for (Task t : p.tasks) {
+							if (t.getTitle().equals(Line[4])) {
+								for (Member m : p.members)
+									if (m.getId() == mid)
+										t.addMember(m);
 
+							}
 						}
 					}
 				}
+			}catch(ArrayIndexOutOfBoundsException e){
+				System.out.println("Blad: Brakuje danych: nazwy projektu/ID osoby/nazwy zadania" );
 			}
 
 			break;
 
 		case "task":
-
-			LocalDate localDate = LocalDate.parse(Line[4]);
-			for (Project p : projects) {
-				if (p.getTitle().equals(Line[3]))
-					p.addTask(new Task(Line[2], localDate));
+			try {
+				LocalDate localDate = LocalDate.parse(Line[4]);
+				for (Project p : projects) {
+					if (p.getTitle().equals(Line[3]))
+						p.addTask(new Task(Line[2], localDate));
+				}
+			}catch(ArrayIndexOutOfBoundsException e){
+				System.out.println("Blad: Brakuje nazwy zadania lub daty" );
 			}
-
 			break;
 
 		default: {
@@ -209,6 +218,9 @@ public class Reader {
 			break;
 
 		case "task":
+			if (projects.isEmpty())
+				throw new OwnException("task");
+
 			int tid = Integer.parseInt(Line[2]);
 
 			for (Project p : projects) {
@@ -228,16 +240,26 @@ public class Reader {
 		}
 	}
 
-	public static void modify(ArrayList<Project> projects, ArrayList<Member> members) {
+	public static void modify(ArrayList<Project> projects, ArrayList<Member> members) throws OwnException {
 		switch (Line[1]) {
 		case "project":
+
+			if (projects.isEmpty())
+				throw new OwnException("project");
+
+
 			int id = Integer.parseInt(Line[2]);
 			for (Project p : projects)
 				if (p.getId() == id)
 					p.setTitle(Line[3]);
+
 			break;
 
 		case "person":
+
+			if (members.isEmpty())
+				throw new OwnException("person");
+
 			int pid = Integer.parseInt(Line[2]);
 			for (Member m : members)
 				if (m.getId() == pid)
@@ -245,6 +267,10 @@ public class Reader {
 			break;
 
 		case "task":
+
+			if (members.isEmpty())
+				throw new OwnException("task");
+
 			int tid = Integer.parseInt(Line[2]);
 
 			for (Project p : projects) {
@@ -263,23 +289,35 @@ public class Reader {
 		}
 	}
 
-	public static void list(ArrayList<Project> projects, ArrayList<Member> members) {
+	public static void list(ArrayList<Project> projects, ArrayList<Member> members) throws OwnException {
 
 		switch (Line[1]) {
 
 		case "project":
+
+			if (projects.isEmpty())
+				throw new OwnException("project");
+
 			for (Project p : projects) {
 				System.out.println(p);
 			}
 			break;
 
 		case "person":
+
+			if (projects.isEmpty())
+				throw new OwnException("person");
+
 			for (Member m : members) {
 				System.out.println(m);
 			}
 			break;
 
 		case "members_of_project":
+
+			if (projects.isEmpty())
+				throw new OwnException("members of project");
+
 			for (Project p : projects) {
 				if (p.getTitle().equals(Line[2]))
 					p.showMembers();
@@ -287,6 +325,10 @@ public class Reader {
 			break;
 
 		case "assign_to_task":
+
+			if (projects.isEmpty())
+				throw new OwnException("assign to task");
+
 			for (Project p : projects) {
 				if (p.getTitle().equals(Line[2])) {
 					for (Task t : p.tasks) {
@@ -300,6 +342,11 @@ public class Reader {
 			break;
 
 		case "task":
+
+			if (projects.isEmpty())
+				throw new OwnException("members of project");
+
+
 			LocalDate today = LocalDate.now();
 
 			if (Line[2].equals("asc")) {

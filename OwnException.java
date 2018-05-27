@@ -4,7 +4,7 @@ public class OwnException extends IOException {
 
 	public OwnException(String name) 
 	{
-		super();
+		super(name);
 		System.out.println("There is no "+ name + " exception");
 	}
 }
