@@ -20,42 +20,43 @@ public class Reader {
 
 	public static String[] Line;
 
+	public static void Do(String s, ArrayList<Project> projects, ArrayList<Member> members) throws OwnException {
+		try {
+			Line = s.split(" ");
 
-	public static void Do(String s, ArrayList<Project> projects, ArrayList<Member> members) {
+			switch (Line[0]) {
+			case "add":
+				add(projects, members);
+				break;
 
-		Line = s.split(" ");
+			case "list":
+				list(projects, members);
+				break;
 
-		switch (Line[0]) {
-		case "add":
-			add(projects, members);
-			break;
+			case "modify":
+				modify(projects, members);
+				break;
 
-		case "list":
-			list(projects, members);
-			break;
+			case "delete":
+				delete(projects, members);
+				break;
 
-		case "modify":
-			modify(projects, members);
-			break;
+			case "export":
+				export(projects, members);
+				break;
 
-		case "delete":
-			delete(projects, members);
-			break;
+			case "import":
+				read(projects, members);
+				break;
 
-		case "export":
-			export(projects, members);
-			break;
-
-		case "import":
-			read(projects, members);
-			break;
-
-		default: {
-			System.out.println("Error!");
-			break;
+			default: {
+				System.out.println("Error!");
+				break;
+			}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace(System.out);
 		}
-		}
-
 	}
 
 	public static void export(ArrayList<Project> projects, ArrayList<Member> members) {
@@ -90,13 +91,8 @@ public class Reader {
 		 */
 
 		try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(Line[1]))) {
-			ArrayList<Project> newProj;
-			ArrayList<Member> newMemb;
-
-			newMemb = (ArrayList<Member>) input.readObject();
-
-			newProj = (ArrayList<Project>) input.readObject();
-
+			ArrayList<Project> newProj = (ArrayList<Project>) input.readObject();
+			ArrayList<Member> newMemb = (ArrayList<Member>) input.readObject();
 			for (Member m : newMemb) {
 				members.add(m);
 			}
@@ -114,48 +110,67 @@ public class Reader {
 
 	}
 
-	public static void add(ArrayList<Project> projects, ArrayList<Member> members) {
+	public static void add(ArrayList<Project> projects, ArrayList<Member> members) throws OwnException {
 		switch (Line[1]) {
 		case "project":
 			projects.add(new Project(Line[2]));
+			if (Line[2].isEmpty())
+				throw new OwnException("project name");
 			break;
 
 		case "person":
 			members.add(new Member(Line[2], Line[3], Line[4]));
+			if (Line[2].isEmpty())
+				throw new OwnException("name");
+
+			if (Line[3].isEmpty())
+				throw new OwnException("surname");
+
+			if (Line[4].isEmpty())
+				throw new OwnException("email");
+
 			break;
 
 		case "person_to_project":
 			int id = Integer.parseInt(Line[2]);
-			Member memberToAdd = members.get(id);
 
 			for (Project p : projects) {
 				if (p.getTitle().equals(Line[3]))
-					p.addMember(memberToAdd);
+					for (Member m : members)
+						if (m.getId() == id)
+							p.addMember(m);
 			}
 			break;
 
 		case "person_to_task":
 			int mid = Integer.parseInt(Line[2]);
-			Member memberToAddToTask = members.get(mid);
 
 			for (Project p : projects) {
 				if (p.getTitle().equals(Line[3])) {
-					p.addMember(memberToAddToTask);
+					for (Member m : members)
+						if (m.getId() == mid)
+							p.addMember(m);
 					for (Task t : p.tasks) {
 						if (t.getTitle().equals(Line[4])) {
-							t.addMember(memberToAddToTask);
+							for (Member m : p.members)
+								if (m.getId() == mid)
+									t.addMember(m);
+
 						}
 					}
 				}
 			}
+
 			break;
 
 		case "task":
+
 			LocalDate localDate = LocalDate.parse(Line[4]);
 			for (Project p : projects) {
 				if (p.getTitle().equals(Line[3]))
 					p.addTask(new Task(Line[2], localDate));
 			}
+
 			break;
 
 		default: {
@@ -166,16 +181,31 @@ public class Reader {
 		}
 	}
 
-	public static void delete(ArrayList<Project> projects, ArrayList<Member> members) {
+	public static void delete(ArrayList<Project> projects, ArrayList<Member> members) throws OwnException {
 		switch (Line[1]) {
 		case "project":
+
+			if (projects.isEmpty())
+				throw new OwnException("project");
+
 			int id = Integer.parseInt(Line[2]);
-			projects.remove(id);
+
+			for (Project p : projects)
+				if (p.getId() == id)
+					projects.remove(p);
 			break;
 
 		case "person":
-			int pid = Integer.parseInt(Line[2]);
-			members.remove(pid);
+
+			if (members.isEmpty())
+				throw new OwnException("person");
+
+			int mid = Integer.parseInt(Line[2]);
+
+			for (Member m : members)
+				if (m.getId() == mid)
+					members.remove(m);
+
 			break;
 
 		case "task":
@@ -183,8 +213,9 @@ public class Reader {
 
 			for (Project p : projects) {
 				if (p.getTitle().equals(Line[3])) {
-					p.tasks.remove(tid);
-
+					for (Task t : p.tasks)
+						if (t.getId() == tid)
+							p.tasks.remove(t);
 				}
 			}
 			break;
@@ -201,12 +232,16 @@ public class Reader {
 		switch (Line[1]) {
 		case "project":
 			int id = Integer.parseInt(Line[2]);
-			projects.get(id).setTitle(Line[3]);
+			for (Project p : projects)
+				if (p.getId() == id)
+					p.setTitle(Line[3]);
 			break;
 
 		case "person":
 			int pid = Integer.parseInt(Line[2]);
-			members.get(pid).setName(Line[3], Line[4]);
+			for (Member m : members)
+				if (m.getId() == pid)
+					m.setName(Line[3], Line[4]);
 			break;
 
 		case "task":
@@ -214,8 +249,9 @@ public class Reader {
 
 			for (Project p : projects) {
 				if (p.getTitle().equals(Line[3])) {
-					p.tasks.get(tid).setTitle(Line[4]);
-
+					for (Task t : p.tasks)
+						if (t.getId() == tid)
+							t.setTitle(Line[4]);
 				}
 			}
 			break;
@@ -272,18 +308,18 @@ public class Reader {
 						Collections.sort(p.tasks);
 					p.showTask();
 				}
-			
+
 			}
 
 			else if (Line[2].equals("desc")) {
 				for (Project p : projects) {
 					if (p.getTitle().equals(Line[3]))
 						Collections.sort(p.tasks);
-						Collections.reverse(p.tasks);
+					Collections.reverse(p.tasks);
 					p.showTask();
 				}
 			}
-			
+
 			else if (Line[2].equals("tardy")) {
 
 				for (Project p : projects) {
@@ -291,9 +327,9 @@ public class Reader {
 						for (Task t : p.tasks) {
 							if (today.isAfter((t.getDate()))) {
 								System.out.println(t.toString());
-						}
+							}
 
-					}
+						}
 				}
 			}
 			break;

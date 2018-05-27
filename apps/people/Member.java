@@ -30,6 +30,6 @@ public class Member implements Serializable {
 	}
 
 	public String toString() {
-		return firstName + " " + lastName + " (" + email + ")";
+		return "Id=" + getId() + " First name: " + firstName + " Surname: " + lastName + " Email: " + email;
 	}
 }

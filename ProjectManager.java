@@ -7,7 +7,7 @@ import java.util.*;
 
 class ProjectManger
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws OwnException
     {
       ArrayList<Project> projects = new ArrayList<>();
       ArrayList<Member> members = new ArrayList<>();
