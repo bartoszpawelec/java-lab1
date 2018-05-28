@@ -377,7 +377,8 @@ public class Reader {
 
 						}
 				}
-			}
+			} else
+				System.out.println("should be: list task asc/desc/tardy projectName");
 			break;
 
 		default:

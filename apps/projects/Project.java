@@ -35,7 +35,7 @@ public class Project extends Base implements Serializable {
 	}
 
 	public String toString() {
-		String out = "Id=" + getId() + " Project title: " + getTitle();
+		String out = " Project title: " + getTitle();
 		return out;
 	}
 }
