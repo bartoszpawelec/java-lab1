@@ -116,7 +116,7 @@ public class Reader {
 		case "project":
 			try {
 				projects.add(new Project(Line[2]));
-			}catch(ArrayIndexOutOfBoundsException e) {
+			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("Blad: Nie podano nazwy projektu!");
 			}
 
@@ -125,7 +125,7 @@ public class Reader {
 		case "person":
 			try {
 				members.add(new Member(Line[2], Line[3], Line[4]));
-			}catch(ArrayIndexOutOfBoundsException e) {
+			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("Blad: Brakuje danych o osobie!");
 			}
 
@@ -141,8 +141,8 @@ public class Reader {
 							if (m.getId() == id)
 								p.addMember(m);
 				}
-			}catch(ArrayIndexOutOfBoundsException e){
-				System.out.println("Blad: Brakuje nazwy projektu lub ID osoby" );
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Blad: Brakuje nazwy projektu lub ID osoby");
 			}
 			break;
 
@@ -165,8 +165,8 @@ public class Reader {
 						}
 					}
 				}
-			}catch(ArrayIndexOutOfBoundsException e){
-				System.out.println("Blad: Brakuje danych: nazwy projektu/ID osoby/nazwy zadania" );
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Blad: Brakuje danych: nazwy projektu/ID osoby/nazwy zadania");
 			}
 
 			break;
@@ -178,8 +178,8 @@ public class Reader {
 					if (p.getTitle().equals(Line[3]))
 						p.addTask(new Task(Line[2], localDate));
 				}
-			}catch(ArrayIndexOutOfBoundsException e){
-				System.out.println("Blad: Brakuje nazwy zadania lub daty" );
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Blad: Brakuje nazwy zadania lub daty");
 			}
 			break;
 
@@ -247,7 +247,6 @@ public class Reader {
 
 			if (projects.isEmpty())
 				throw new OwnException("project");
-
 
 			int id = Integer.parseInt(Line[2]);
 			for (Project p : projects)
@@ -347,7 +346,6 @@ public class Reader {
 			if (projects.isEmpty())
 				throw new OwnException("task");
 
-
 			LocalDate today = LocalDate.now();
 
 			if (Line[2].equals("asc")) {
@@ -379,7 +377,8 @@ public class Reader {
 
 						}
 				}
-			}
+			} else
+				System.out.println("should be: list task asc/desc/tardy projectName");
 			break;
 
 		default:
