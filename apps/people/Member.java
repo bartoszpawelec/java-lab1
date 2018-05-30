@@ -32,4 +32,46 @@ public class Member implements Serializable {
 	public String toString() {
 		return " First name: " + firstName + " Surname: " + lastName + " Email: " + email;
 	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getID() {
+		return Integer.toString(id);
+	}
+
+	interface GetAttr {
+		String attr();
+	}
+
+	private GetAttr[] attrs = new GetAttr[] { new GetAttr() {
+		public String attr() {
+			return getID();
+		}
+	}, new GetAttr() {
+		public String attr() {
+			return getFirstName();
+		}
+	}, new GetAttr() {
+		public String attr() {
+			return getLastName();
+		}
+	}, new GetAttr() {
+		public String attr() {
+			return getEmail();
+		}
+	}, };
+
+	public String attr(int index) {
+		return attrs[index].attr();
+	}
 }
