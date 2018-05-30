@@ -91,8 +91,9 @@ public class Reader {
 		 */
 
 		try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(Line[1]))) {
-			ArrayList<Project> newProj = (ArrayList<Project>) input.readObject();
 			ArrayList<Member> newMemb = (ArrayList<Member>) input.readObject();
+			ArrayList<Project> newProj = (ArrayList<Project>) input.readObject();
+
 			for (Member m : newMemb) {
 				members.add(m);
 			}
@@ -102,7 +103,7 @@ public class Reader {
 		} catch (FileNotFoundException fex) {
 			fex.printStackTrace();
 
-		} catch (ClassNotFoundException cex) {
+		}catch (ClassNotFoundException cex) {
 			cex.printStackTrace();
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -344,7 +345,7 @@ public class Reader {
 		case "task":
 
 			if (projects.isEmpty())
-				throw new OwnException("members of project");
+				throw new OwnException("task");
 
 
 			LocalDate today = LocalDate.now();
