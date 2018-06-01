@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import apps.add.AddPerson;
 import apps.people.Member;
 
 public class OwnFrame extends JFrame {
