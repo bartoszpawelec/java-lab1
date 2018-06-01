@@ -19,22 +19,27 @@ import javax.swing.table.AbstractTableModel;
 
 import apps.add.AddPerson;
 import apps.people.Member;
+import apps.table.PersonTableModel;
 
 public class OwnFrame extends JFrame {
 	private static final int DEFAULT_WIDTH = 500;
 	private static final int DEFAULT_HEIGHT = 300;
-	private JTable table;
+	
 	private JFileChooser inFile;
 	private JFileChooser outFile;
-	private AddPerson dialog = null;
-	private PersonTableModel model;
+	private AddPerson addPersonDialog = null;
+	private PersonTableModel personTableModel;
+	
+	private JTable personTable;
+	
+	
 	
 	public OwnFrame() {
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		table = new JTable();
+		personTable = new JTable();
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
-		JMenuItem importItem = new JMenuItem("Import");
+		
 		inFile = new JFileChooser();
 		outFile = new JFileChooser();
 		
@@ -49,8 +54,8 @@ public class OwnFrame extends JFrame {
 					 while(inf.hasNextLine())
 				      {
 				        String[] line = inf.nextLine().split(";");
-				        model.addPerson(new Member(line[0], line[1], line[2]));
-						model.fireTableDataChanged();
+				        personTableModel.addPerson(new Member(line[0], line[1], line[2]));
+						personTableModel.fireTableDataChanged();
 				      }
 				}
 				catch(IOException e)
@@ -70,7 +75,7 @@ public class OwnFrame extends JFrame {
 				String name = outFile.getSelectedFile().getPath();
 				try(PrintWriter outf = new PrintWriter(name);)
 				{
-					 for(Member p: model.getPersons())
+					 for(Member p: personTableModel.getPersons())
 				      {
 				        outf.println(p);
 				      }
@@ -97,20 +102,20 @@ public class OwnFrame extends JFrame {
 		menuBar.add(fileMenu);
 		menuBar.add(aboutMenu);
 		setJMenuBar(menuBar);
-		add(new JScrollPane(table));
+		add(new JScrollPane(personTable));
 		pack();
 		
 	}
 
 	private class NewPersonAction implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			if(dialog == null) dialog = new AddPerson();
+			if(addPersonDialog == null) addPersonDialog = new AddPerson();
 			
-			if(dialog.showDialog(OwnFrame.this, "Add person"))
+			if(addPersonDialog.showDialog(OwnFrame.this, "Add person"))
 			{
-				Member p = dialog.getPerson();
-				model.addPerson(p);
-				model.fireTableDataChanged();
+				Member p = addPersonDialog.getPerson();
+				personTableModel.addPerson(p);
+				personTableModel.fireTableDataChanged();
 			}
 		}
 	}
@@ -122,38 +127,5 @@ public class OwnFrame extends JFrame {
 
 
 
-class PersonTableModel extends AbstractTableModel {
-
-	private ArrayList<Member> people = new ArrayList<>();
-	private static int columns = 4;
-	private String[] columnNames = {"Id", "First name", "Last name", "Email"};
-	
-	public PersonTableModel() {
-	}
-	
-	public int getRowCount() {
-		return people.size();
-	}
-	
-	public int getColumnCount() {
-		return columns;
-	}
-	
-	public Object getValueAt(int r, int c) {
-		return people.get(r).attr(c);
-	}
-	
-	public String getColumnName(int c) {
-		return columnNames[c];
-	}
-	
-	public void addPerson(Member p) {
-		people.add(p);
-	}
-	
-	public ArrayList<Member> getPersons() {
-		return people;
-	}
-}
 
 
