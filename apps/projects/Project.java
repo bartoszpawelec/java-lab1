@@ -8,6 +8,8 @@ import java.util.*;
 public class Project extends Base implements Serializable {
 	public ArrayList<Task> tasks;
 	public ArrayList<Member> members;
+	public String title;
+	public int id;
 	
 	public Project(String t) {
 		super(t);
@@ -38,4 +40,32 @@ public class Project extends Base implements Serializable {
 		String out = " Project title: " + getTitle();
 		return out;
 	}
+
+	public String getTitle() {
+		return title;
+	}
+	public String getID() {
+		return Integer.toString(id);
+	}
+
+
+	interface GetAttr {
+		String attr();
+	}
+
+	private Project.GetAttr[] attrs = new Project.GetAttr[] { new Project.GetAttr() {
+		public String attr() {
+			return getID();
+		}
+	}, new Project.GetAttr() {
+		public String attr() {
+			return getTitle();
+		}
+	},
+	};
+
+	public String attr(int index) {
+		return attrs[index].attr();
+	}
+
 }

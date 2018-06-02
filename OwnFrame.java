@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -8,11 +9,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 
 import apps.add.*;
 import apps.people.Member;
+import apps.projects.Project;
 import apps.table.PersonTableModel;
+import apps.table.ProjectTableModel;
 
 public class OwnFrame extends JFrame {
 	private static final int DEFAULT_WIDTH = 500;
@@ -23,10 +27,13 @@ public class OwnFrame extends JFrame {
 	private AddPerson addPersonDialog = null;
 	private DeletePerson deletePersonDialog = null;
 	private ModifyPerson modifyPersonDialog = null;
+	private AddProject addProjectDialog = null;
 	private PersonTableModel personTableModel;
+	private ProjectTableModel projectTableModel;
 	JMenuItem importItem = new JMenuItem("Import");
 	
 	private JTable personTable;
+	private JTable projectTable;
 	
 	
 	
@@ -35,9 +42,12 @@ public class OwnFrame extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		personTableModel = new PersonTableModel();
 		personTable = new JTable(personTableModel);
+		projectTableModel = new ProjectTableModel();
+		projectTable = new JTable(projectTableModel);
 
 		JMenu fileMenu = new JMenu("File");
 		JMenu memberMenu = new JMenu("Member");
+		JMenu projectMenu = new JMenu("Project");
 		
 		inFile = new JFileChooser();
 		outFile = new JFileChooser();
@@ -94,6 +104,8 @@ public class OwnFrame extends JFrame {
 		deletePersonItem.addActionListener(new DeletePersonAction());
 		JMenuItem modifyPersonItem = new JMenuItem("Modify");
 		modifyPersonItem.addActionListener(new ModifyPersonAction());
+		JMenuItem addProjectItem = new JMenuItem("New");
+		addProjectItem.addActionListener(new AddProjectAction());
 		JMenuItem importItem = new JMenuItem("Import");
 		fileMenu.addSeparator();
 		fileMenu.add(importItem);
@@ -105,14 +117,33 @@ public class OwnFrame extends JFrame {
 		memberMenu.add(deletePersonItem);
 		memberMenu.add(modifyPersonItem);
 
+		projectMenu.add(addProjectItem);
+
+
+
 		JMenu aboutMenu = new JMenu("About");
 		JMenuItem aboutItem = new JMenuItem("About ...");
+
 		aboutMenu.add(aboutItem);
 		menuBar.add(fileMenu);
 		menuBar.add(aboutMenu);
 		menuBar.add(memberMenu);
+		menuBar.add(projectMenu);
 		setJMenuBar(menuBar);
+
+		setLayout(new GridLayout(1,3));
+		JPanel personPanel = new JPanel();
+		JPanel projectPanel = new JPanel();
+
+		personPanel.setLayout(new BorderLayout());
+		projectPanel.setLayout(new BorderLayout());
+
+		personPanel.add(personTable.getTableHeader(),BorderLayout.PAGE_START);
+		personPanel.add(personTable,BorderLayout.CENTER);
+		projectPanel.add(projectTable.getTableHeader(),BorderLayout.PAGE_START);
+		projectPanel.add(projectTable,BorderLayout.CENTER);
 		add(new JScrollPane(personTable));
+		add(new JScrollPane(projectTable));
 		pack();
 		
 	}
@@ -139,7 +170,6 @@ public class OwnFrame extends JFrame {
 				personTableModel.deletePerson(personId);
 				personTableModel.fireTableDataChanged();
 
-
 			}
 		}
 	}
@@ -151,6 +181,19 @@ public class OwnFrame extends JFrame {
 			if(modifyPersonDialog.showDialog(OwnFrame.this, "Modify person")){
 				modifyPersonDialog.getModify(personTableModel);
 				personTableModel.fireTableDataChanged();
+			}
+		}
+	}
+
+	private class AddProjectAction implements ActionListener {
+		public void actionPerformed(ActionEvent event){
+			if(addProjectDialog == null) addProjectDialog = new AddProject();
+
+			if(addProjectDialog.showDialog(OwnFrame.this, "Add project")){
+				Project p = addProjectDialog.getProject();
+				projectTableModel.addProject(p);
+				projectTableModel.fireTableDataChanged();
+
 			}
 		}
 	}
