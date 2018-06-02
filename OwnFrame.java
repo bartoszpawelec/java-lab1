@@ -7,17 +7,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
-import apps.add.AddPerson;
+import apps.add.*;
 import apps.people.Member;
 import apps.table.PersonTableModel;
 
@@ -28,7 +21,10 @@ public class OwnFrame extends JFrame {
 	private JFileChooser inFile;
 	private JFileChooser outFile;
 	private AddPerson addPersonDialog = null;
+	private DeletePerson deletePersonDialog = null;
+	private ModifyPerson modifyPersonDialog = null;
 	private PersonTableModel personTableModel;
+	JMenuItem importItem = new JMenuItem("Import");
 	
 	private JTable personTable;
 	
@@ -36,13 +32,17 @@ public class OwnFrame extends JFrame {
 	
 	public OwnFrame() {
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		personTable = new JTable();
 		JMenuBar menuBar = new JMenuBar();
+		personTableModel = new PersonTableModel();
+		personTable = new JTable(personTableModel);
+
 		JMenu fileMenu = new JMenu("File");
+		JMenu memberMenu = new JMenu("Member");
 		
 		inFile = new JFileChooser();
 		outFile = new JFileChooser();
-		
+
+
 		importItem.addActionListener(event -> { 
 			inFile.setCurrentDirectory(new File("."));
 			int res = inFile.showOpenDialog(OwnFrame.this);
@@ -88,38 +88,72 @@ public class OwnFrame extends JFrame {
 		});
 		JMenuItem exitItem = new JMenuItem("Exit");
 		exitItem.addActionListener(event -> System.exit(0));
-		JMenuItem newItem = new JMenuItem("New");
-		newItem.addActionListener(new NewPersonAction());
-		fileMenu.add(newItem);
+		JMenuItem addPersonItem = new JMenuItem("New");
+		addPersonItem.addActionListener(new AddPersonAction());
+		JMenuItem deletePersonItem = new JMenuItem("Delete");
+		deletePersonItem.addActionListener(new DeletePersonAction());
+		JMenuItem modifyPersonItem = new JMenuItem("Modify");
+		modifyPersonItem.addActionListener(new ModifyPersonAction());
+		JMenuItem importItem = new JMenuItem("Import");
 		fileMenu.addSeparator();
 		fileMenu.add(importItem);
 		fileMenu.add(exportItem);
 		fileMenu.addSeparator();
 		fileMenu.add(exitItem);
+
+		memberMenu.add(addPersonItem);
+		memberMenu.add(deletePersonItem);
+		memberMenu.add(modifyPersonItem);
+
 		JMenu aboutMenu = new JMenu("About");
 		JMenuItem aboutItem = new JMenuItem("About ...");
 		aboutMenu.add(aboutItem);
 		menuBar.add(fileMenu);
 		menuBar.add(aboutMenu);
+		menuBar.add(memberMenu);
 		setJMenuBar(menuBar);
 		add(new JScrollPane(personTable));
 		pack();
 		
 	}
 
-	private class NewPersonAction implements ActionListener {
+	private class AddPersonAction implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if(addPersonDialog == null) addPersonDialog = new AddPerson();
 			
 			if(addPersonDialog.showDialog(OwnFrame.this, "Add person"))
 			{
-				Member p = addPersonDialog.getPerson();
-				personTableModel.addPerson(p);
+				Member m = addPersonDialog.getPerson();
+				personTableModel.addPerson(m);
 				personTableModel.fireTableDataChanged();
 			}
 		}
 	}
-	
+
+	private class DeletePersonAction implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			if (deletePersonDialog == null) deletePersonDialog = new DeletePerson();
+
+			if (deletePersonDialog.showDialog(OwnFrame.this, "Delete person")) {
+				int personId = deletePersonDialog.getId();
+				personTableModel.deletePerson(personId);
+				personTableModel.fireTableDataChanged();
+
+
+			}
+		}
+	}
+
+	private class ModifyPersonAction implements  ActionListener {
+		public void actionPerformed(ActionEvent event){
+			if(modifyPersonDialog == null) modifyPersonDialog = new ModifyPerson();
+
+			if(modifyPersonDialog.showDialog(OwnFrame.this, "Modify person")){
+				modifyPersonDialog.getModify(personTableModel);
+				personTableModel.fireTableDataChanged();
+			}
+		}
+	}
 }
 
 

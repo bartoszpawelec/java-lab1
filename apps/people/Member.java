@@ -3,11 +3,11 @@ package apps.people;
 import java.io.Serializable;
 
 public class Member implements Serializable {
-	private String firstName;
-	private String lastName;
-	private String email;
+	public String firstName;
+	public String lastName;
+	public String email;
 	private static int nextId = 1;
-	private int id;
+	public int id;
 
 	public Member(String fn, String ln, String e) {
 		firstName = fn;
