@@ -8,16 +8,27 @@ import java.util.*;
 public class Project extends Base implements Serializable {
 	public ArrayList<Task> tasks;
 	public ArrayList<Member> members;
-	public String title;
-	public int id;
 	
+	private static int nextId = 1;
+	private int id;
+
 	public Project(String t) {
 		super(t);
 		tasks = new ArrayList<>();
 		members = new ArrayList<>();
+		id = nextId++;
 	}
 
-	
+	public Project(String t, ArrayList<Task> tasks) {
+		super(t);
+		this.tasks = tasks;
+		id = nextId++;
+	}
+
+	public int getId() {
+		return id;
+	}
+
 	public void addTask(Task t) {
 		tasks.add(t);
 	}
@@ -41,28 +52,26 @@ public class Project extends Base implements Serializable {
 		return out;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-	public String getID() {
-		return Integer.toString(id);
-	}
-
-
 	interface GetAttr {
 		String attr();
 	}
 
-	private Project.GetAttr[] attrs = new Project.GetAttr[] { new Project.GetAttr() {
+	private GetAttr[] attrs = new GetAttr[] { new GetAttr() {
 		public String attr() {
-			return getID();
+			return Integer.toString(getId());
 		}
-	}, new Project.GetAttr() {
+	}, new GetAttr() {
 		public String attr() {
 			return getTitle();
 		}
-	},
-	};
+	}, new GetAttr() {
+		public String attr() {
+			String taskString = "";
+			for (Task t : tasks)
+				taskString += (t.getId() + " " + t.getTitle() + " ");
+			return taskString;
+		}
+	} };
 
 	public String attr(int index) {
 		return attrs[index].attr();

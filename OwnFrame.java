@@ -13,30 +13,44 @@ import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 
 import apps.add.*;
+import apps.delete.DeletePerson;
+import apps.delete.DeleteProject;
+import apps.modify.ModifyPerson;
+import apps.modify.ModifyProject;
+import apps.modify.ModifyTask;
 import apps.people.Member;
 import apps.projects.Project;
+import apps.projects.Task;
 import apps.table.PersonTableModel;
 import apps.table.ProjectTableModel;
+import apps.table.TaskTableModel;
 
 public class OwnFrame extends JFrame {
 	private static final int DEFAULT_WIDTH = 500;
 	private static final int DEFAULT_HEIGHT = 300;
-	
+
 	private JFileChooser inFile;
 	private JFileChooser outFile;
 	private AddPerson addPersonDialog = null;
 	private DeletePerson deletePersonDialog = null;
 	private ModifyPerson modifyPersonDialog = null;
+
 	private AddProject addProjectDialog = null;
+	private DeleteProject deleteProjectDialog = null;
+	private ModifyProject modifyProjectDialog = null;
+
+	private AddTask addTaskDialog = null;
+	private ModifyTask modifyTaskDialog = null;
+
 	private PersonTableModel personTableModel;
 	private ProjectTableModel projectTableModel;
+	private TaskTableModel taskTableModel;
 	JMenuItem importItem = new JMenuItem("Import");
-	
+
 	private JTable personTable;
 	private JTable projectTable;
-	
-	
-	
+	private JTable taskTable;
+
 	public OwnFrame() {
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		JMenuBar menuBar = new JMenuBar();
@@ -44,68 +58,74 @@ public class OwnFrame extends JFrame {
 		personTable = new JTable(personTableModel);
 		projectTableModel = new ProjectTableModel();
 		projectTable = new JTable(projectTableModel);
+		taskTableModel = new TaskTableModel();
+		taskTable = new JTable(taskTableModel);
 
 		JMenu fileMenu = new JMenu("File");
 		JMenu memberMenu = new JMenu("Member");
 		JMenu projectMenu = new JMenu("Project");
-		
+		JMenu taskMenu = new JMenu("Task");
+
 		inFile = new JFileChooser();
 		outFile = new JFileChooser();
 
-
-		importItem.addActionListener(event -> { 
+		importItem.addActionListener(event -> {
 			inFile.setCurrentDirectory(new File("."));
 			int res = inFile.showOpenDialog(OwnFrame.this);
-			if(res == JFileChooser.APPROVE_OPTION)
-			{
+			if (res == JFileChooser.APPROVE_OPTION) {
 				String name = inFile.getSelectedFile().getPath();
-				try(Scanner inf = new Scanner(Paths.get(name)))
-				{
-					 while(inf.hasNextLine())
-				      {
-				        String[] line = inf.nextLine().split(";");
-				        personTableModel.addPerson(new Member(line[0], line[1], line[2]));
+				try (Scanner inf = new Scanner(Paths.get(name))) {
+					while (inf.hasNextLine()) {
+						String[] line = inf.nextLine().split(";");
+						personTableModel.addPerson(new Member(line[0], line[1], line[2]));
 						personTableModel.fireTableDataChanged();
-				      }
-				}
-				catch(IOException e)
-				{
-				  JOptionPane.showMessageDialog(OwnFrame.this, "Input file read failed!", "Import error", JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(OwnFrame.this, "Input file read failed!", "Import error",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
-		
+
 		});
-		
+
 		JMenuItem exportItem = new JMenuItem("Export");
 		exportItem.addActionListener(event -> {
 			outFile.setCurrentDirectory(new File("."));
 			int res = outFile.showSaveDialog(OwnFrame.this);
-			if(res == JFileChooser.APPROVE_OPTION)
-			{
+			if (res == JFileChooser.APPROVE_OPTION) {
 				String name = outFile.getSelectedFile().getPath();
-				try(PrintWriter outf = new PrintWriter(name);)
-				{
-					 for(Member p: personTableModel.getPersons())
-				      {
-				        outf.println(p);
-				      }
-				}
-				catch(IOException e)
-				{
-				  JOptionPane.showMessageDialog(OwnFrame.this, "Output file read failed!", "Export error", JOptionPane.ERROR_MESSAGE);
+				try (PrintWriter outf = new PrintWriter(name);) {
+					for (Member p : personTableModel.getPersons()) {
+						outf.println(p);
+					}
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(OwnFrame.this, "Output file read failed!", "Export error",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		JMenuItem exitItem = new JMenuItem("Exit");
 		exitItem.addActionListener(event -> System.exit(0));
+
 		JMenuItem addPersonItem = new JMenuItem("New");
 		addPersonItem.addActionListener(new AddPersonAction());
 		JMenuItem deletePersonItem = new JMenuItem("Delete");
 		deletePersonItem.addActionListener(new DeletePersonAction());
 		JMenuItem modifyPersonItem = new JMenuItem("Modify");
 		modifyPersonItem.addActionListener(new ModifyPersonAction());
+
 		JMenuItem addProjectItem = new JMenuItem("New");
 		addProjectItem.addActionListener(new AddProjectAction());
+		JMenuItem deleteProjectItem = new JMenuItem("Delete");
+		deleteProjectItem.addActionListener(new DeleteProjectAction());
+		JMenuItem modifyProjectItem = new JMenuItem("Modify");
+		modifyProjectItem.addActionListener(new ModifyProjectAction());
+
+		JMenuItem addTaskItem = new JMenuItem("New");
+		addTaskItem.addActionListener(new NewTaskAction());
+		JMenuItem modifyTaskItem = new JMenuItem("Modify");
+		modifyTaskItem.addActionListener(new ModifyTaskAction());
+
 		JMenuItem importItem = new JMenuItem("Import");
 		fileMenu.addSeparator();
 		fileMenu.add(importItem);
@@ -118,42 +138,48 @@ public class OwnFrame extends JFrame {
 		memberMenu.add(modifyPersonItem);
 
 		projectMenu.add(addProjectItem);
+		projectMenu.add(deleteProjectItem);
+		projectMenu.add(modifyProjectItem);
 
-
-
-		JMenu aboutMenu = new JMenu("About");
-		JMenuItem aboutItem = new JMenuItem("About ...");
-
-		aboutMenu.add(aboutItem);
+		taskMenu.add(addTaskItem);
+		taskMenu.add(modifyTaskItem);
+		
 		menuBar.add(fileMenu);
-		menuBar.add(aboutMenu);
 		menuBar.add(memberMenu);
 		menuBar.add(projectMenu);
+		menuBar.add(taskMenu);
+
 		setJMenuBar(menuBar);
 
-		setLayout(new GridLayout(1,3));
+		setLayout(new GridLayout(1, 3));
 		JPanel personPanel = new JPanel();
 		JPanel projectPanel = new JPanel();
+		JPanel taskPanel = new JPanel();
 
 		personPanel.setLayout(new BorderLayout());
 		projectPanel.setLayout(new BorderLayout());
+		taskPanel.setLayout(new BorderLayout());
 
-		personPanel.add(personTable.getTableHeader(),BorderLayout.PAGE_START);
-		personPanel.add(personTable,BorderLayout.CENTER);
-		projectPanel.add(projectTable.getTableHeader(),BorderLayout.PAGE_START);
-		projectPanel.add(projectTable,BorderLayout.CENTER);
+		personPanel.add(personTable.getTableHeader(), BorderLayout.PAGE_START);
+		personPanel.add(personTable, BorderLayout.CENTER);
+		projectPanel.add(projectTable.getTableHeader(), BorderLayout.PAGE_START);
+		projectPanel.add(projectTable, BorderLayout.CENTER);
+		taskPanel.add(taskTable.getTableHeader(), BorderLayout.PAGE_START);
+		taskPanel.add(projectTable, BorderLayout.CENTER);
+
 		add(new JScrollPane(personTable));
 		add(new JScrollPane(projectTable));
+		add(new JScrollPane(taskTable));
 		pack();
-		
+
 	}
 
 	private class AddPersonAction implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			if(addPersonDialog == null) addPersonDialog = new AddPerson();
-			
-			if(addPersonDialog.showDialog(OwnFrame.this, "Add person"))
-			{
+			if (addPersonDialog == null)
+				addPersonDialog = new AddPerson();
+
+			if (addPersonDialog.showDialog(OwnFrame.this, "Add person")) {
 				Member m = addPersonDialog.getPerson();
 				personTableModel.addPerson(m);
 				personTableModel.fireTableDataChanged();
@@ -163,7 +189,8 @@ public class OwnFrame extends JFrame {
 
 	private class DeletePersonAction implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			if (deletePersonDialog == null) deletePersonDialog = new DeletePerson();
+			if (deletePersonDialog == null)
+				deletePersonDialog = new DeletePerson();
 
 			if (deletePersonDialog.showDialog(OwnFrame.this, "Delete person")) {
 				int personId = deletePersonDialog.getId();
@@ -174,11 +201,12 @@ public class OwnFrame extends JFrame {
 		}
 	}
 
-	private class ModifyPersonAction implements  ActionListener {
-		public void actionPerformed(ActionEvent event){
-			if(modifyPersonDialog == null) modifyPersonDialog = new ModifyPerson();
+	private class ModifyPersonAction implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			if (modifyPersonDialog == null)
+				modifyPersonDialog = new ModifyPerson();
 
-			if(modifyPersonDialog.showDialog(OwnFrame.this, "Modify person")){
+			if (modifyPersonDialog.showDialog(OwnFrame.this, "Modify person")) {
 				modifyPersonDialog.getModify(personTableModel);
 				personTableModel.fireTableDataChanged();
 			}
@@ -186,10 +214,11 @@ public class OwnFrame extends JFrame {
 	}
 
 	private class AddProjectAction implements ActionListener {
-		public void actionPerformed(ActionEvent event){
-			if(addProjectDialog == null) addProjectDialog = new AddProject();
+		public void actionPerformed(ActionEvent event) {
+			if (addProjectDialog == null)
+				addProjectDialog = new AddProject();
 
-			if(addProjectDialog.showDialog(OwnFrame.this, "Add project")){
+			if (addProjectDialog.showDialog(OwnFrame.this, "Add project")) {
 				Project p = addProjectDialog.getProject();
 				projectTableModel.addProject(p);
 				projectTableModel.fireTableDataChanged();
@@ -197,12 +226,55 @@ public class OwnFrame extends JFrame {
 			}
 		}
 	}
+
+	private class DeleteProjectAction implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			if (deleteProjectDialog == null)
+				deleteProjectDialog = new DeleteProject();
+
+			if (deleteProjectDialog.showDialog(OwnFrame.this, "Delete project")) {
+				int projectID = deleteProjectDialog.getId();
+				projectTableModel.deleteProject(projectID);
+				projectTableModel.fireTableDataChanged();
+
+			}
+		}
+	}
+
+	private class ModifyProjectAction implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			if (modifyProjectDialog == null)
+				modifyProjectDialog = new ModifyProject();
+
+			if (modifyProjectDialog.showDialog(OwnFrame.this, "Modify project")) {
+				modifyProjectDialog.getModifiedProject(projectTableModel);
+				projectTableModel.fireTableDataChanged();
+			}
+		}
+	}
+
+	private class NewTaskAction implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			if (addTaskDialog == null)
+				addTaskDialog = new AddTask();
+
+			if (addTaskDialog.showDialog(OwnFrame.this, "Add task")) {
+				Task t = addTaskDialog.getTask(projectTableModel, personTableModel);
+				taskTableModel.addTask(t);
+				taskTableModel.fireTableDataChanged();
+			}
+		}
+	}
+	
+    private class ModifyTaskAction implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            if(modifyTaskDialog == null) modifyTaskDialog = new ModifyTask();
+
+            if(modifyTaskDialog.showDialog(OwnFrame.this, "Mofify task")) {
+                modifyTaskDialog.getModifiedTask(taskTableModel, personTableModel);
+                taskTableModel.fireTableDataChanged();
+            }
+        }
+    }
+
 }
-
-
-
-
-
-
-
-
