@@ -182,12 +182,11 @@ public class OwnFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			if (addPersonDialog == null)
 				addPersonDialog = new AddPerson();
-
-			if (addPersonDialog.showDialog(OwnFrame.this, "Add person")) {
-				Member m = addPersonDialog.getPerson();
-				personTableModel.addPerson(m);
-				personTableModel.fireTableDataChanged();
-			}
+				if (addPersonDialog.showDialog(OwnFrame.this, "Add person")) {
+					Member m = addPersonDialog.getPerson();
+					personTableModel.addPerson(m);
+					personTableModel.fireTableDataChanged();
+					}
 		}
 	}
 
@@ -221,12 +220,14 @@ public class OwnFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			if (addProjectDialog == null)
 				addProjectDialog = new AddProject();
-
-			if (addProjectDialog.showDialog(OwnFrame.this, "Add project")) {
-				Project p = addProjectDialog.getProject(personTableModel);
-				projectTableModel.addProject(p);
-				projectTableModel.fireTableDataChanged();
-
+			try {
+				if (addProjectDialog.showDialog(OwnFrame.this, "Add project")) {
+					Project p = addProjectDialog.getProject(personTableModel);
+					projectTableModel.addProject(p);
+					projectTableModel.fireTableDataChanged();
+				}
+			} catch (NumberFormatException e) {
+				System.out.println("BŁĄD: Podaj ID osoby!");
 			}
 		}
 	}
@@ -235,12 +236,15 @@ public class OwnFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			if (deleteProjectDialog == null)
 				deleteProjectDialog = new DeleteProject();
+			try {
+				if (deleteProjectDialog.showDialog(OwnFrame.this, "Delete project")) {
+					int projectID = deleteProjectDialog.getId();
+					projectTableModel.deleteProject(projectID);
+					projectTableModel.fireTableDataChanged();
 
-			if (deleteProjectDialog.showDialog(OwnFrame.this, "Delete project")) {
-				int projectID = deleteProjectDialog.getId();
-				projectTableModel.deleteProject(projectID);
-				projectTableModel.fireTableDataChanged();
-
+				}
+			}catch (NumberFormatException e) {
+				System.out.println("BŁĄD: Podaj ID projektu!");
 			}
 		}
 	}
@@ -249,10 +253,13 @@ public class OwnFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			if (modifyProjectDialog == null)
 				modifyProjectDialog = new ModifyProject();
-
-			if (modifyProjectDialog.showDialog(OwnFrame.this, "Modify project")) {
-				modifyProjectDialog.getModifiedProject(projectTableModel);
-				projectTableModel.fireTableDataChanged();
+			try {
+				if (modifyProjectDialog.showDialog(OwnFrame.this, "Modify project")) {
+					modifyProjectDialog.getModifiedProject(projectTableModel);
+					projectTableModel.fireTableDataChanged();
+				}
+			}catch(NumberFormatException e) {
+				System.out.println("BŁĄD: Podaj ID osoby!");
 			}
 		}
 	}
@@ -261,37 +268,45 @@ public class OwnFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			if (addTaskDialog == null)
 				addTaskDialog = new AddTask();
-
-			if (addTaskDialog.showDialog(OwnFrame.this, "Add task")) {
-				Task t = addTaskDialog.getTask(projectTableModel, personTableModel);
-				taskTableModel.addTask(t);
-				taskTableModel.fireTableDataChanged();
+			try {
+				if (addTaskDialog.showDialog(OwnFrame.this, "Add task")) {
+					Task t = addTaskDialog.getTask(projectTableModel, personTableModel);
+					taskTableModel.addTask(t);
+					taskTableModel.fireTableDataChanged();
+				}
+			} catch (NumberFormatException e) {
+				System.out.println("BŁĄD: Podaj ID projektu oraz osoby!");
 			}
 		}
 	}
-	
+
     private class ModifyTaskAction implements ActionListener {
         public void actionPerformed(ActionEvent event) {
-            if(modifyTaskDialog == null) modifyTaskDialog = new ModifyTask();
-
-            if(modifyTaskDialog.showDialog(OwnFrame.this, "Mofify task")) {
-                modifyTaskDialog.getModifiedTask(taskTableModel, personTableModel);
-                taskTableModel.fireTableDataChanged();
-            }
-        }
+			if (modifyTaskDialog == null) modifyTaskDialog = new ModifyTask();
+			try {
+				if (modifyTaskDialog.showDialog(OwnFrame.this, "Modify task")) {
+					modifyTaskDialog.getModifiedTask(taskTableModel, personTableModel);
+					taskTableModel.fireTableDataChanged();
+				}
+			}catch(NumberFormatException e) {
+				System.out.println("BŁĄD: Podaj ID osoby oraz projektu!");
+			}
+		}
     }
 
     public class DeleteTaskAction implements ActionListener {
 		public void  actionPerformed(ActionEvent event) {
-			if(deleteTaskDialog == null) deleteTaskDialog = new DeleteTask();
-			if(deleteTaskDialog.showDialog(OwnFrame.this, "Delete task")){
-				int taskID = deleteTaskDialog.getId();
-				taskTableModel.deleteTask(taskID,projectTableModel);
-				taskTableModel.fireTableDataChanged();
+			if (deleteTaskDialog == null) deleteTaskDialog = new DeleteTask();
+			try {
+				if (deleteTaskDialog.showDialog(OwnFrame.this, "Delete task")) {
+					int taskID = deleteTaskDialog.getId();
+					taskTableModel.deleteTask(taskID, projectTableModel);
+					taskTableModel.fireTableDataChanged();
+				}
+			}catch (NumberFormatException e) {
+				System.out.println("Podaj ID zadania!");
 			}
 		}
 	}
-
-
 
 }
