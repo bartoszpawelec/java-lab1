@@ -12,7 +12,7 @@ public class TaskTableModel extends AbstractTableModel {
 
     private ArrayList<Task> tasks = new ArrayList<>();
     private static int columns = 4;
-    private String[] columnNames = {"Task Id", "Task Name", "Task Executor", "Due"};
+    private String[] columnNames = {"Task Id", "Task Name", "Task Executor", "Deadline"};
 
     public TaskTableModel() {
     }
