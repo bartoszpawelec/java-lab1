@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 public class ModifyProject extends JPanel {
 	private JTextField Title;
 	private JTextField Id;
+	private JTextField Executor;
 	private JButton saveButton;
 	private JButton cancelButton;
 	private boolean ok;
@@ -31,6 +32,8 @@ public class ModifyProject extends JPanel {
 		panel.add(Id = new JTextField(""));
 		panel.add(new JLabel("Title:"));
 		panel.add(Title = new JTextField(""));
+		panel.add(new JLabel("Executor Id:"));
+		panel.add(Executor = new JTextField(""));
 
 		add(panel, BorderLayout.CENTER);
 

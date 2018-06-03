@@ -11,8 +11,8 @@ import apps.projects.Task;
 
 public class ProjectTableModel extends AbstractTableModel {
 	private ArrayList<Project> projects = new ArrayList<>();
-	private static int columns = 3;
-	private String[] columnNames = { "Project Id", "Title", "Project Tasks" };
+	private static int columns = 4;
+	private String[] columnNames = { "Project Id", "Title", "Project Tasks","Project Executor" };
 
 	public int getRowCount() {
 		return projects.size();

@@ -3,12 +3,14 @@ package apps.projects;
 import apps.people.Member;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Project extends Base implements Serializable {
 	public ArrayList<Task> tasks;
 	public ArrayList<Member> members;
-	
+
+	private Member executor;
 	private static int nextId = 1;
 	private int id;
 
@@ -25,6 +27,13 @@ public class Project extends Base implements Serializable {
 		id = nextId++;
 	}
 
+	public Project(String t, Member m)
+	{
+		super(t);
+		executor = m;
+		id = nextId++;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -36,6 +45,14 @@ public class Project extends Base implements Serializable {
 	public void addMember(Member m) {
 		members.add(m);
 	}
+
+	public void setExecutor(int memberID, List<Member> people) {
+		for (Member p : people) {
+			if (p.getId() == memberID)
+				this.executor = p;
+		}
+	}
+
 
 	public void showTask() {
 		for (Task t : tasks)
@@ -71,7 +88,11 @@ public class Project extends Base implements Serializable {
 				taskString += (t.getId() + " " + t.getTitle() + " ");
 			return taskString;
 		}
-	} };
+	}, new GetAttr() {
+		public String attr() {
+			return executor.toString();
+		}
+	}};
 
 
 	public String attr(int index) {

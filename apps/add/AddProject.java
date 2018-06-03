@@ -12,10 +12,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import apps.projects.Project;
+import apps.table.PersonTableModel;
 
 public class AddProject extends JPanel {
 
     private JTextField title;
+    private JTextField executorID;
     private JButton saveButton;
     private JButton cancelButton;
     private boolean ok;
@@ -27,6 +29,8 @@ public class AddProject extends JPanel {
         panel.setLayout(new GridLayout(2, 2));
         panel.add(new JLabel("Project title:"));
         panel.add(title = new JTextField(""));
+        panel.add(new JLabel("Executor ID"));
+        panel.add(executorID = new JTextField(""));
         add(panel, BorderLayout.CENTER);
 
         saveButton = new JButton("Save");
@@ -44,8 +48,10 @@ public class AddProject extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    public Project getProject() {
-        return new Project(title.getText());
+    public Project getProject(PersonTableModel personTableModel) {
+        Project p = new Project(title.getText());
+        p.setExecutor(Integer.parseInt(executorID.getText()), personTableModel.getPersons());
+        return p;
     }
 
 	public boolean showDialog(Component parent, String title) {

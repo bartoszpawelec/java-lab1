@@ -42,7 +42,7 @@ public class TaskTableModel extends AbstractTableModel {
         while (taskIterator.hasNext()) {
             Task t = taskIterator.next();
             if (t.getId() == i) {
-//            		projectTableModel.getProjects().remove(t);    
+            		projectTableModel.getProjects().remove(t);
                 taskIterator.remove();
             }
         }

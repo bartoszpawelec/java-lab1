@@ -15,6 +15,7 @@ import javax.swing.table.AbstractTableModel;
 import apps.add.*;
 import apps.delete.DeletePerson;
 import apps.delete.DeleteProject;
+import apps.delete.DeleteTask;
 import apps.modify.ModifyPerson;
 import apps.modify.ModifyProject;
 import apps.modify.ModifyTask;
@@ -41,7 +42,7 @@ public class OwnFrame extends JFrame {
 
 	private AddTask addTaskDialog = null;
 	private ModifyTask modifyTaskDialog = null;
-
+	private DeleteTask deleteTaskDialog = null;
 	private PersonTableModel personTableModel;
 	private ProjectTableModel projectTableModel;
 	private TaskTableModel taskTableModel;
@@ -122,9 +123,11 @@ public class OwnFrame extends JFrame {
 		modifyProjectItem.addActionListener(new ModifyProjectAction());
 
 		JMenuItem addTaskItem = new JMenuItem("New");
-		addTaskItem.addActionListener(new NewTaskAction());
+		addTaskItem.addActionListener(new AddTaskAction());
 		JMenuItem modifyTaskItem = new JMenuItem("Modify");
 		modifyTaskItem.addActionListener(new ModifyTaskAction());
+		JMenuItem deleteTaskItem = new JMenuItem("Delete");
+		deleteTaskItem.addActionListener(new DeleteTaskAction());
 
 		JMenuItem importItem = new JMenuItem("Import");
 		fileMenu.addSeparator();
@@ -143,6 +146,7 @@ public class OwnFrame extends JFrame {
 
 		taskMenu.add(addTaskItem);
 		taskMenu.add(modifyTaskItem);
+		taskMenu.add(deleteTaskItem);
 		
 		menuBar.add(fileMenu);
 		menuBar.add(memberMenu);
@@ -219,7 +223,7 @@ public class OwnFrame extends JFrame {
 				addProjectDialog = new AddProject();
 
 			if (addProjectDialog.showDialog(OwnFrame.this, "Add project")) {
-				Project p = addProjectDialog.getProject();
+				Project p = addProjectDialog.getProject(personTableModel);
 				projectTableModel.addProject(p);
 				projectTableModel.fireTableDataChanged();
 
@@ -253,7 +257,7 @@ public class OwnFrame extends JFrame {
 		}
 	}
 
-	private class NewTaskAction implements ActionListener {
+	private class AddTaskAction implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if (addTaskDialog == null)
 				addTaskDialog = new AddTask();
@@ -276,5 +280,18 @@ public class OwnFrame extends JFrame {
             }
         }
     }
+
+    public class DeleteTaskAction implements ActionListener {
+		public void  actionPerformed(ActionEvent event) {
+			if(deleteTaskDialog == null) deleteTaskDialog = new DeleteTask();
+			if(deleteTaskDialog.showDialog(OwnFrame.this, "Delete task")){
+				int taskID = deleteTaskDialog.getId();
+				taskTableModel.deleteTask(taskID,projectTableModel);
+				taskTableModel.fireTableDataChanged();
+			}
+		}
+	}
+
+
 
 }
