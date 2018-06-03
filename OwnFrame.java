@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.print.attribute.standard.NumberOfInterveningJobs;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
@@ -194,12 +195,17 @@ public class OwnFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			if (deletePersonDialog == null)
 				deletePersonDialog = new DeletePerson();
+			try {
+				if (deletePersonDialog.showDialog(OwnFrame.this, "Delete person")) {
+					int personId = deletePersonDialog.getId();
+					personTableModel.deletePerson(personId);
+					personTableModel.fireTableDataChanged();
 
-			if (deletePersonDialog.showDialog(OwnFrame.this, "Delete person")) {
-				int personId = deletePersonDialog.getId();
-				personTableModel.deletePerson(personId);
-				personTableModel.fireTableDataChanged();
-
+				}
+			}catch (NumberFormatException e) {
+				System.out.println("BŁĄD: Podaj ID!");
+			}catch (IndexOutOfBoundsException ex) {
+				System.out.println("BŁĄD: Nie ma projektu o takim ID!");
 			}
 		}
 	}
@@ -208,10 +214,15 @@ public class OwnFrame extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			if (modifyPersonDialog == null)
 				modifyPersonDialog = new ModifyPerson();
-
-			if (modifyPersonDialog.showDialog(OwnFrame.this, "Modify person")) {
-				modifyPersonDialog.getModify(personTableModel);
-				personTableModel.fireTableDataChanged();
+			try {
+				if (modifyPersonDialog.showDialog(OwnFrame.this, "Modify person")) {
+					modifyPersonDialog.getModify(personTableModel);
+					personTableModel.fireTableDataChanged();
+				}
+			}catch (NumberFormatException e) {
+				System.out.println("BŁĄD: Podaj ID!");
+			}catch (IndexOutOfBoundsException ex){
+				System.out.println("BŁĄD: Nie ma projektu o takim ID! ");
 			}
 		}
 	}
@@ -227,6 +238,8 @@ public class OwnFrame extends JFrame {
 					projectTableModel.fireTableDataChanged();
 				}
 			} catch (NumberFormatException e) {
+				System.out.println("BŁĄD: Podaj ID osoby!");
+			} catch (NullPointerException e) {
 				System.out.println("BŁĄD: Podaj ID osoby!");
 			}
 		}
@@ -245,6 +258,9 @@ public class OwnFrame extends JFrame {
 				}
 			}catch (NumberFormatException e) {
 				System.out.println("BŁĄD: Podaj ID projektu!");
+			}catch (NullPointerException e){
+				System.out.println("BŁĄD: Podaj ID projektu");
+
 			}
 		}
 	}
@@ -259,7 +275,9 @@ public class OwnFrame extends JFrame {
 					projectTableModel.fireTableDataChanged();
 				}
 			}catch(NumberFormatException e) {
-				System.out.println("BŁĄD: Podaj ID osoby!");
+				System.out.println("BŁĄD: Podaj ID projektu!");
+			}catch(IndexOutOfBoundsException e){
+				System.out.println("BŁĄD: Podaj ID projektu!");
 			}
 		}
 	}
@@ -276,6 +294,8 @@ public class OwnFrame extends JFrame {
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("BŁĄD: Podaj ID projektu oraz osoby!");
+			} catch(IndexOutOfBoundsException e) {
+				System.out.println(("BŁĄD: Podaj ID projektu oraz osoby"));
 			}
 		}
 	}
@@ -290,6 +310,9 @@ public class OwnFrame extends JFrame {
 				}
 			}catch(NumberFormatException e) {
 				System.out.println("BŁĄD: Podaj ID osoby oraz projektu!");
+			}catch(IndexOutOfBoundsException e)
+			{
+				System.out.println("BŁĄD: Podaj ID osoby oraz projektu");
 			}
 		}
     }
@@ -304,6 +327,9 @@ public class OwnFrame extends JFrame {
 					taskTableModel.fireTableDataChanged();
 				}
 			}catch (NumberFormatException e) {
+				System.out.println("Podaj ID zadania!");
+			}catch (IndexOutOfBoundsException e)
+			{
 				System.out.println("Podaj ID zadania!");
 			}
 		}

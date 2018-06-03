@@ -36,11 +36,17 @@ public class PersonTableModel extends AbstractTableModel {
 	}
 
 	public void deletePerson(int tmp) {
+		int i=0;
 		Iterator<Member> personIterator = people.iterator();
 		while (personIterator.hasNext()) {
 			Member m = personIterator.next();
 			if (m.id == tmp)
 				personIterator.remove();
+			i++;
+		}
+		if(i==0)
+		{
+			System.out.println("Nie istnieje osoba o takim ID!");
 		}
 	}
 	public ArrayList<Member> getPersons() {

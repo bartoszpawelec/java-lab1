@@ -41,11 +41,17 @@ public class ProjectTableModel extends AbstractTableModel {
 	}
 
 	public void deleteProject(int i) {
+		int tmp=0;
 		Iterator<Project> projectIterator = projects.iterator();
 		while (projectIterator.hasNext()) {
 			Project p = projectIterator.next();
 			if (p.getId() == i)
 				projectIterator.remove();
+			tmp++;
+		}
+		if(tmp==0)
+		{
+			System.out.println("Nie istnieje projekt o takim ID!");
 		}
 	}
 

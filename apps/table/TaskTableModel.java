@@ -38,14 +38,17 @@ public class TaskTableModel extends AbstractTableModel {
     }
 
     public void deleteTask(int i, ProjectTableModel projectTableModel) {
+        int tmp=0;
         Iterator<Task> taskIterator = tasks.iterator();
         while (taskIterator.hasNext()) {
             Task t = taskIterator.next();
             if (t.getId() == i) {
             		projectTableModel.getProjects().remove(t);
                 taskIterator.remove();
+                tmp++;
             }
         }
+        System.out.println("Nie istnieje zadanie o takim ID!");
     }
 
     public ArrayList<Task> getTasks() {
