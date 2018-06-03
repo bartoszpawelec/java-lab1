@@ -45,17 +45,13 @@ public class Member implements Serializable {
 		return email;
 	}
 
-	public String getID() {
-		return Integer.toString(id);
-	}
-
 	interface GetAttr {
 		String attr();
 	}
 
 	private GetAttr[] attrs = new GetAttr[] { new GetAttr() {
 		public String attr() {
-			return getID();
+			return Integer.toString(id);
 		}
 	}, new GetAttr() {
 		public String attr() {

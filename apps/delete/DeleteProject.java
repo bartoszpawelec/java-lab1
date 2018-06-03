@@ -1,4 +1,4 @@
-package apps.add;
+package apps.delete;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
@@ -11,35 +11,24 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import apps.people.Member;
-import apps.table.PersonTableModel;
 
-public class ModifyPerson extends JPanel{
-    private JTextField firstName;
-    private JTextField lastName;
-    private JTextField email;
-    private JTextField id;
-    private JButton saveButton;
+public class DeleteProject extends JPanel {
+    private JTextField projectID;
+    private JButton deleteButton;
     private JButton cancelButton;
     private boolean ok;
     private JDialog dialog;
 
-    public ModifyPerson() {
+    public DeleteProject() {
         setLayout(new BorderLayout());
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2));
-        panel.add(new JLabel("Member Id:"));
-        panel.add(id = new JTextField(""));
-        panel.add(new JLabel("First name:"));
-        panel.add(firstName = new JTextField(""));
-        panel.add(new JLabel("Last name:"));
-        panel.add(lastName = new JTextField(""));
-        panel.add(new JLabel("Email:"));
-        panel.add(email = new JTextField(""));
+        panel.setLayout(new GridLayout(3, 2));
+        panel.add(new JLabel("Project id:"));
+        panel.add(projectID = new JTextField(""));
         add(panel, BorderLayout.CENTER);
 
-        saveButton = new JButton("Save");
-        saveButton.addActionListener(event -> {
+        deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
         });
@@ -48,19 +37,13 @@ public class ModifyPerson extends JPanel{
         cancelButton.addActionListener(event -> dialog.setVisible(false));
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(saveButton);
+        buttonPanel.add(deleteButton);
         buttonPanel.add(cancelButton);
         add(buttonPanel, BorderLayout.SOUTH);
     }
-
-    public void getModify(PersonTableModel personTableModel)
-    {
-        int tmp = Integer.parseInt(id.getText())-1;
-        Member m = personTableModel.getPersons().get(tmp);
-        m.firstName = firstName.getText();
-        m.lastName = lastName.getText();
-        m.email = email.getText();
-
+    public int getId() {
+        int tmp = Integer.parseInt(projectID.getText());
+        return tmp;
     }
 
     public boolean showDialog(Component parent, String title) {
@@ -76,7 +59,7 @@ public class ModifyPerson extends JPanel{
         {
             dialog = new JDialog(owner, true);
             dialog.add(this);
-            dialog.getRootPane().setDefaultButton(saveButton);
+            dialog.getRootPane().setDefaultButton(deleteButton);
             dialog.pack();
         }
 
@@ -84,4 +67,6 @@ public class ModifyPerson extends JPanel{
         dialog.setVisible(true);
         return ok;
     }
+
 }
+

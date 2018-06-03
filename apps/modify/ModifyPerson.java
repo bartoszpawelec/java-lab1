@@ -1,4 +1,4 @@
-package apps.add;
+package apps.modify;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
@@ -11,22 +11,31 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import apps.projects.Project;
+import apps.people.Member;
+import apps.table.PersonTableModel;
 
-public class AddProject extends JPanel {
-
-    private JTextField title;
+public class ModifyPerson extends JPanel{
+    private JTextField firstName;
+    private JTextField lastName;
+    private JTextField email;
+    private JTextField id;
     private JButton saveButton;
     private JButton cancelButton;
     private boolean ok;
     private JDialog dialog;
 
-    public AddProject() {
+    public ModifyPerson() {
         setLayout(new BorderLayout());
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 2));
-        panel.add(new JLabel("Project title:"));
-        panel.add(title = new JTextField(""));
+        panel.setLayout(new GridLayout(4, 2));
+        panel.add(new JLabel("Member Id:"));
+        panel.add(id = new JTextField(""));
+        panel.add(new JLabel("First name:"));
+        panel.add(firstName = new JTextField(""));
+        panel.add(new JLabel("Last name:"));
+        panel.add(lastName = new JTextField(""));
+        panel.add(new JLabel("Email:"));
+        panel.add(email = new JTextField(""));
         add(panel, BorderLayout.CENTER);
 
         saveButton = new JButton("Save");
@@ -44,11 +53,17 @@ public class AddProject extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    public Project getProject() {
-        return new Project(title.getText());
+    public void getModify(PersonTableModel personTableModel)
+    {
+        int tmp = Integer.parseInt(id.getText())-1;
+        Member m = personTableModel.getPersons().get(tmp);
+        m.firstName = firstName.getText();
+        m.lastName = lastName.getText();
+        m.email = email.getText();
+
     }
 
-	public boolean showDialog(Component parent, String title) {
+    public boolean showDialog(Component parent, String title) {
         ok = false;
 
         Frame owner = null;
@@ -69,5 +84,4 @@ public class AddProject extends JPanel {
         dialog.setVisible(true);
         return ok;
     }
-
 }

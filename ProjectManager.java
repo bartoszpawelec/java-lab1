@@ -26,7 +26,7 @@ class ProjectManger
       
       OwnFrame ownFrame = new OwnFrame();
       ownFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      ownFrame.setTitle("Own Frame");
+      ownFrame.setTitle("Project Manager");
       ownFrame.setVisible(true);
     }
 }
