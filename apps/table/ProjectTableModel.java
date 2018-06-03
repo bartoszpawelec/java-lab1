@@ -6,11 +6,14 @@ import java.util.Iterator;
 import javax.swing.table.AbstractTableModel;
 
 import apps.projects.Project;
+import apps.add.AddProject;
 
 public class ProjectTableModel extends AbstractTableModel {
     private ArrayList<Project> projects = new ArrayList<>();
     private static int columns = 3;
     private String[] columnNames = {"Project Id", "Title", "Project Tasks"};
+
+    public ProjectTableModel(){}
 
     public int getRowCount() { return projects.size(); }
 
