@@ -1,5 +1,7 @@
 package apps.delete;
 
+import apps.table.dbTable.TaskDb;
+
 import javax.swing.*;
 
 
@@ -28,6 +30,7 @@ public class DeleteTask extends JPanel implements Serializable {
         deleteButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
+            TaskDb.deleteTask(Integer.parseInt(taskID.getText()));
         });
 
         cancelButton = new JButton("Cancel");

@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 import apps.projects.Task;
 import apps.table.PersonTableModel;
 import apps.table.TaskTableModel;
+import apps.table.dbTable.TaskDb;
 
 
 public class ModifyTask extends JPanel implements Serializable{
@@ -49,6 +50,7 @@ public class ModifyTask extends JPanel implements Serializable{
         saveButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
+            TaskDb.modifyTask(Title.getText(),LocalDate.parse(Due.getText()), Integer.parseInt(Executor.getText()),Integer.parseInt(Id.getText()));
        });
 
         cancelButton = new JButton("Cancel");
