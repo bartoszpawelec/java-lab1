@@ -2,9 +2,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,7 +35,7 @@ import apps.table.PersonTableModel;
 import apps.table.ProjectTableModel;
 import apps.table.TaskTableModel;
 
-public class OwnFrame extends JFrame {
+public class OwnFrame extends JFrame implements Serializable{
 	private static final int DEFAULT_WIDTH = 500;
 	private static final int DEFAULT_HEIGHT = 300;
 
@@ -66,31 +74,38 @@ public class OwnFrame extends JFrame {
 		JMenu memberMenu = new JMenu("Member");
 		JMenu projectMenu = new JMenu("Project");
 		JMenu taskMenu = new JMenu("Task");
-
+		
+		JMenuItem importItem = new JMenuItem("Import");
+		
 		inFile = new JFileChooser();
 		outFile = new JFileChooser();
-
-		JMenuItem importItem = new JMenuItem("Import");
+		
 		importItem.addActionListener(event -> {
 			inFile.setCurrentDirectory(new File("."));
 			int res = inFile.showOpenDialog(OwnFrame.this);
 			if (res == JFileChooser.APPROVE_OPTION) {
 				String name = inFile.getSelectedFile().getPath();
 				try (Scanner inf = new Scanner(Paths.get(name))) {
-					while (inf.hasNextLine()) {
+
+					inf.next();
+					int number = inf.nextInt();
+					inf.nextLine();
+					for (int i = 1; i <= number; i++) {
 						String[] line = inf.nextLine().split(";");
-						personTableModel.addPerson(new Member(line[0], line[1], line[2]));
+						personTableModel.addPerson(new Member(line[1], line[2], line[3]));
 						personTableModel.fireTableDataChanged();
-						//projectTableModel.addProject(new Project(line[0]));
 					}
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(OwnFrame.this, "Input file read failed!", "Import error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
-
 		});
 
+		JMenuItem importDB = new JMenuItem("Import DB");
+		importDB.addActionListener(event -> {
+			ImportFromDB();
+		});
 		JMenuItem exportItem = new JMenuItem("Export");
 		exportItem.addActionListener(event -> {
 			outFile.setCurrentDirectory(new File("."));
@@ -113,7 +128,15 @@ public class OwnFrame extends JFrame {
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(OwnFrame.this, "Output file read failed!", "Export error",
 							JOptionPane.ERROR_MESSAGE);
-				}
+				}/*
+				try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(name))) {
+					output.writeObject(personTableModel.getPersons());
+					output.writeObject(projectTableModel.getProjects());
+
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}*/
+
 			}
 		});
 		JMenuItem exitItem = new JMenuItem("Exit");
@@ -250,6 +273,8 @@ public class OwnFrame extends JFrame {
 				System.out.println("Blad: Podaj ID osoby!");
 			} catch (NullPointerException e) {
 				System.out.println("Blad: Podaj ID osoby!");
+			} catch(Exception e) {
+				System.out.println("Blad: Podaj ID osoby!");
 			}
 		}
 	}
@@ -341,6 +366,31 @@ public class OwnFrame extends JFrame {
 			} catch (IndexOutOfBoundsException e) {
 				System.out.println("Podaj ID zadania!");
 			}
+		}
+	}
+	
+
+	public void ImportFromDB() {
+		Connection con = null;
+		try {
+			try {
+				Class.forName("org.sqlite.JDBC");
+				con = DriverManager.getConnection("jdbc:sqlite:SQLitePM.db");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			Statement stmt = con.createStatement();
+			String sql = "select * from people";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				personTableModel.addPerson(new Member(rs.getString(2), rs.getString(3), rs.getString(4)));
+				personTableModel.fireTableDataChanged();
+			}
+			
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 

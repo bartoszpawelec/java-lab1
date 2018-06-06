@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.io.Serializable;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -14,7 +15,7 @@ import javax.swing.SwingUtilities;
 import apps.people.Member;
 import apps.table.PersonTableModel;
 
-public class ModifyPerson extends JPanel{
+public class ModifyPerson extends JPanel implements Serializable{
     private JTextField firstName;
     private JTextField lastName;
     private JTextField email;

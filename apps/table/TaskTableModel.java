@@ -5,10 +5,11 @@ import javax.swing.table.AbstractTableModel;
 
 import apps.projects.Task;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TaskTableModel extends AbstractTableModel {
+public class TaskTableModel extends AbstractTableModel implements Serializable {
 
     private ArrayList<Task> tasks = new ArrayList<>();
     private static int columns = 4;

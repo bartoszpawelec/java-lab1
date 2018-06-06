@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.io.Serializable;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -12,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 
-public class DeleteProject extends JPanel {
+public class DeleteProject extends JPanel implements Serializable {
     private JTextField projectID;
     private JButton deleteButton;
     private JButton cancelButton;

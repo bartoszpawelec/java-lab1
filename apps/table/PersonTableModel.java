@@ -1,12 +1,13 @@
 package apps.table;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.table.AbstractTableModel;
 
 import apps.people.Member;
-public class PersonTableModel extends AbstractTableModel {
+public class PersonTableModel extends AbstractTableModel implements Serializable{
 
 	private ArrayList<Member> people = new ArrayList<>();
 	private static int columns = 4;

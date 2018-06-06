@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.concurrent.Executor;
 
@@ -19,7 +20,7 @@ import apps.table.PersonTableModel;
 import apps.table.TaskTableModel;
 
 
-public class ModifyTask extends JPanel {
+public class ModifyTask extends JPanel implements Serializable{
     private JTextField Title;
     private JTextField Id;
     private JTextField Due;

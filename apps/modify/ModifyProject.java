@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.io.Serializable;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -15,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class ModifyProject extends JPanel {
+public class ModifyProject extends JPanel implements Serializable{
 	private JTextField Title;
 	private JTextField Id;
 	private JTextField Executor;

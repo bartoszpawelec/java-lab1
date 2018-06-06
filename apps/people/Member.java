@@ -16,6 +16,7 @@ public class Member implements Serializable {
 		id = nextId++;
 	}
 
+
 	public int getId() {
 		return id;
 	}
@@ -30,7 +31,7 @@ public class Member implements Serializable {
 	}
 
 	public String toString() {
-		return " First name: " + firstName + " Surname: " + lastName + " Email: " + email;
+		return firstName + " " + lastName + " " + email;
 	}
 
 	public String getFirstName() {

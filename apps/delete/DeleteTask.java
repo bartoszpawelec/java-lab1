@@ -4,9 +4,10 @@ import javax.swing.*;
 
 
 import java.awt.*;
+import java.io.Serializable;
 
 
-public class DeleteTask extends JPanel {
+public class DeleteTask extends JPanel implements Serializable {
     private JTextField taskID;
     private JButton deleteButton;
     private JButton cancelButton;

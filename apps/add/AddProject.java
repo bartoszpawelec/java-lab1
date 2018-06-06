@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.io.Serializable;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -14,7 +15,7 @@ import javax.swing.SwingUtilities;
 import apps.projects.Project;
 import apps.table.PersonTableModel;
 
-public class AddProject extends JPanel {
+public class AddProject extends JPanel implements Serializable {
 
     private JTextField title;
     private JTextField executorID;
@@ -48,6 +49,11 @@ public class AddProject extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+
+    public Project getProject() {
+        return new Project(title.getText());
+}
+    
     public Project getProject(PersonTableModel personTableModel) {
         Project p = new Project(title.getText());
         p.setExecutor(Integer.parseInt(executorID.getText()), personTableModel.getPersons());

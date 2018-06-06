@@ -5,6 +5,8 @@ import java.util.List;
 import java.io.Serializable;
 import java.lang.Object;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import apps.people.Member;
 
 public class Task extends Base implements Comparable<Task>, Serializable {
@@ -35,6 +37,16 @@ public class Task extends Base implements Comparable<Task>, Serializable {
 		members = new ArrayList<>();
 		id = nextId++;
 	}
+	
+
+    public Task(String t, Member executor, String d) {
+        super(t);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(d, formatter);
+        finishDate = date;
+        this.executor = executor;
+        id = nextId++;
+    }
 
 	public int getId() {
 		return id;

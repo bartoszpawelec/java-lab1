@@ -7,9 +7,10 @@ import apps.table.PersonTableModel;
 import apps.table.ProjectTableModel;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class AddTask extends JPanel {
+public class AddTask extends JPanel implements Serializable{
     private JTextField name;
     private JTextField projectID;
     private JTextField Due;

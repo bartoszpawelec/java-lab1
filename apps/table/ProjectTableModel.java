@@ -1,5 +1,6 @@
 package apps.table;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,7 +10,7 @@ import apps.projects.Project;
 
 import apps.projects.Task;
 
-public class ProjectTableModel extends AbstractTableModel {
+public class ProjectTableModel extends AbstractTableModel implements Serializable {
 	private ArrayList<Project> projects = new ArrayList<>();
 	private static int columns = 4;
 	private String[] columnNames = { "Project Id", "Title", "Project Tasks","Project Executor" };
