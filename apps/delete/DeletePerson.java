@@ -1,4 +1,6 @@
 package apps.delete;
+import apps.table.dbTable.PersonDb;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
@@ -32,6 +34,7 @@ public class DeletePerson extends JPanel implements Serializable {
         deleteButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
+            PersonDb.deletePerson(Integer.parseInt(personID.getText()));
         });
 
         cancelButton = new JButton("Cancel");

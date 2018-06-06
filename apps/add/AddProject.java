@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 
 import apps.projects.Project;
 import apps.table.PersonTableModel;
+import apps.table.dbTable.ProjectDb;
 
 public class AddProject extends JPanel implements Serializable {
 
@@ -38,6 +39,7 @@ public class AddProject extends JPanel implements Serializable {
         saveButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
+            ProjectDb.insertProject(title.getText(), Integer.parseInt(executorID.getText()),0);
         });
 
         cancelButton = new JButton("Cancel");

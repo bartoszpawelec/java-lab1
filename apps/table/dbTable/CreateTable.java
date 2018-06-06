@@ -6,8 +6,8 @@ import java.sql.Statement;
 
 public class CreateTable {
 	
-	private static Connection con;
-	private static Statement stmt;
+	private static Connection connection;
+	private static Statement statement;
 	
 	static String CreatePeople = "CREATE TABLE IF NOT EXISTS people " 	+
 			"(id INTEGER PRIMARY KEY AUTOINCREMENT					,"  +
@@ -19,27 +19,30 @@ public class CreateTable {
 	static String CreateTasks = "CREATE TABLE IF NOT EXISTS tasks " 		+
             "(id INTEGER PRIMARY KEY AUTOINCREMENT					,"  +
             " name			      	CHAR(50)    				,"  +
-            " deadline        		CHAR(50)					,"  +
+            " due       		    DATE				    ,"  +
             " executor				INT							,"	+ 
             " project				INT					)";
 	
 	static String CreateProjects = "CREATE TABLE IF NOT EXISTS projects " +
             "(id INTEGER PRIMARY KEY AUTOINCREMENT					,"  +
-            " name			      	CHAR(50)    		)";
+            " name			      	CHAR(50)    		," +
+			" projectTasks          INT               ," +
+			" executor              INT                )";
+
 	
 	
 	public static void create() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:SQLitePM.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:ProjectManager.db");
 			System.out.println("Opened database successfully");
 
-			stmt = con.createStatement();
-			stmt.executeUpdate(CreatePeople);
-			stmt.executeUpdate(CreateTasks);
-			stmt.executeUpdate(CreateProjects);
+			statement = connection.createStatement();
+			statement.executeUpdate(CreatePeople);
+			statement.executeUpdate(CreateTasks);
+			statement.executeUpdate(CreateProjects);
 
-			con.close();
+			connection.close();
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		

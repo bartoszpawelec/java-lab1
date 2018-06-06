@@ -375,7 +375,7 @@ public class OwnFrame extends JFrame implements Serializable{
 		try {
 			try {
 				Class.forName("org.sqlite.JDBC");
-				con = DriverManager.getConnection("jdbc:sqlite:SQLitePM.db");
+				con = DriverManager.getConnection("jdbc:sqlite:ProjectManager.db");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}

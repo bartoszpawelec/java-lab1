@@ -5,17 +5,13 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import apps.table.dbTable.PersonDb;
 
 import apps.people.Member;
 
@@ -44,7 +40,7 @@ public class AddPerson extends JPanel implements Serializable {
 		saveButton.addActionListener(event -> {
 			ok = true;
 			dialog.setVisible(false);
-			insertPerson(firstName.getText(), lastName.getText(), email.getText(), 0);
+			PersonDb.insertPerson(firstName.getText(), lastName.getText(), email.getText(), 0);
 
 		});
 
@@ -81,29 +77,4 @@ public class AddPerson extends JPanel implements Serializable {
 		dialog.setVisible(true);
 		return ok;
 	}
-
-	static Connection con;
-	static Statement stmt;
-
-	public static boolean insertPerson(String name, String surname, String email, int project) {
-		try {
-			try {
-				Class.forName("org.sqlite.JDBC");
-				con = DriverManager.getConnection("jdbc:sqlite:SQLitePM.db");
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				return false;
-			}
-
-			stmt = con.createStatement();
-			String sql = "insert into people (name, surname, project) values ('" + name + "', '" + surname + "','"
-					+ email + "', " + project + ")";
-			stmt.executeUpdate(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
 }

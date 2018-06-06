@@ -6,7 +6,8 @@ import java.io.PrintWriter;
 import java.util.*;
 
 import javax.swing.JFrame;
-import apps.table.dbTable.CreateTable;;
+import apps.table.dbTable.CreateTable;
+import apps.add.AddPerson;
 class ProjectManger
 {
     public static void main(String[] args) throws OwnException

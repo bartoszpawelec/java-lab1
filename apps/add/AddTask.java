@@ -5,12 +5,16 @@ import javax.swing.*;
 import apps.projects.Task;
 import apps.table.PersonTableModel;
 import apps.table.ProjectTableModel;
+import apps.table.dbTable.TaskDb;
 
 import java.awt.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 public class AddTask extends JPanel implements Serializable{
+
+
+
     private JTextField name;
     private JTextField projectID;
     private JTextField Due;
@@ -39,6 +43,7 @@ public class AddTask extends JPanel implements Serializable{
         saveButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
+            TaskDb.insertTask(name.getText(), Integer.parseInt(executorID.getText()), LocalDate.parse(Due.getText()),Integer.parseInt(projectID.getText()));
         });
 
         cancelButton = new JButton("Cancel");

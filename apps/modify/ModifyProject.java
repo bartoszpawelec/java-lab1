@@ -2,6 +2,7 @@ package apps.modify;
 
 import apps.projects.Project;
 import apps.table.ProjectTableModel;
+import apps.table.dbTable.ProjectDb;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -42,6 +43,7 @@ public class ModifyProject extends JPanel implements Serializable{
 		saveButton.addActionListener(event -> {
 			ok = true;
 			dialog.setVisible(false);
+			ProjectDb.modifyProject(Integer.parseInt(Id.getText()), Title.getText());
 		});
 
 		cancelButton = new JButton("Cancel");

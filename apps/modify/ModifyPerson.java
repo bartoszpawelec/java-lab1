@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 
 import apps.people.Member;
 import apps.table.PersonTableModel;
+import apps.table.dbTable.PersonDb;
 
 public class ModifyPerson extends JPanel implements Serializable{
     private JTextField firstName;
@@ -43,6 +44,7 @@ public class ModifyPerson extends JPanel implements Serializable{
         saveButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
+            PersonDb.modifyPerson(firstName.getText(), lastName.getText(), email.getText(),Integer.parseInt(id.getText()));
         });
 
         cancelButton = new JButton("Cancel");
