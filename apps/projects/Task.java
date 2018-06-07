@@ -81,7 +81,8 @@ public class Task extends Base implements Comparable<Task>, Serializable {
 	}
 
 	public String toString() {
-		return " Task name: " + getTitle() + " Deadline: " + getDate();
+
+        return id + ";" + getTitle() + ";" + finishDate.toString() + ";" + executor.id;
 	}
 
 	public int compareTo(Task t) {

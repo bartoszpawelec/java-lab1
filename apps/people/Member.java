@@ -22,7 +22,7 @@ public class Member implements Serializable {
 	}
 
 	public String getName() {
-		return firstName + " " + lastName + " " + email;
+		return id + ";" + firstName + " " + lastName + " " + email;
 	}
 
 	public void setName(String firstName, String lastName) {
@@ -31,7 +31,7 @@ public class Member implements Serializable {
 	}
 
 	public String toString() {
-		return firstName + " " + lastName + " " + email;
+		return firstName + ";" + lastName + ";" + email;
 	}
 
 	public String getFirstName() {
@@ -56,15 +56,15 @@ public class Member implements Serializable {
 		}
 	}, new GetAttr() {
 		public String attr() {
-			return getFirstName();
+			return firstName;
 		}
 	}, new GetAttr() {
 		public String attr() {
-			return getLastName();
+			return lastName;
 		}
 	}, new GetAttr() {
 		public String attr() {
-			return getEmail();
+			return email;
 		}
 	}, };
 

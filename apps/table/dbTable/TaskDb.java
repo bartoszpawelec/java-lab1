@@ -9,7 +9,7 @@ public class TaskDb {
     static Connection connection;
     static Statement statement;
 
-    public static boolean insertTask(String name, int executor, LocalDate due, int project) {
+    public static boolean insertTask(String name, int executor, LocalDate deadline, int project) {
         try {
             try {
                 Class.forName("org.sqlite.JDBC");
@@ -20,7 +20,7 @@ public class TaskDb {
             }
 
             statement = connection.createStatement();
-            String sql = "insert into tasks (name, executor, due, project) values ('" + name + "', '" + executor + "', '" + due + "', '" + project +"')" ;
+            String sql = "insert into tasks (name, executor, deadline, project) values ('" + name + "', '" + executor + "', '" + deadline + "', '" + project +"')" ;
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();

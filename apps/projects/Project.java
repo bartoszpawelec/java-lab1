@@ -65,8 +65,15 @@ public class Project extends Base implements Serializable {
 	}
 
 	public String toString() {
-		String out = " Project title: " + getTitle();
-		return out;
+        String tasksString = "";
+        String membersString = "";
+
+        for(Task t : tasks)
+            tasksString += t + ";";
+        for(Member m : members)
+            membersString += m + ";";
+        
+        return id + ";" + getTitle() + ";" + tasks.size() + ";" + tasksString + ";" + members.size() +";" + membersString;
 	}
 
 	interface GetAttr {

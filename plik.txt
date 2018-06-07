@@ -1,9 +1,1 @@
-Osoby: 1
-Pawel Paw p@onet
-Zadania: 2
- Task name: t1 Deadline: 2018-06-07
- Task name: t2 Deadline: 2018-06-07
-Projekty: 3
- Project title: p1
- Project title: p2
- Project title: p3
+asdasd;asd;sdada

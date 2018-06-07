@@ -17,7 +17,7 @@ public class AddTask extends JPanel implements Serializable{
 
     private JTextField name;
     private JTextField projectID;
-    private JTextField Due;
+    private JTextField deadline;
     private JTextField executorID;
     private JButton saveButton;
     private JButton cancelButton;
@@ -32,8 +32,8 @@ public class AddTask extends JPanel implements Serializable{
         panel.add(name = new JTextField(""));
         panel.add(new JLabel("Project ID:"));
         panel.add(projectID = new JTextField(""));
-        panel.add(new JLabel("Due: "));
-        panel.add(Due = new JTextField(LocalDate.now().toString()));
+        panel.add(new JLabel("Deadline: "));
+        panel.add(deadline = new JTextField(LocalDate.now().toString()));
         panel.add(new JLabel("Executor ID:"));
         panel.add(executorID = new JTextField(""));
 
@@ -43,7 +43,7 @@ public class AddTask extends JPanel implements Serializable{
         saveButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
-            TaskDb.insertTask(name.getText(), Integer.parseInt(executorID.getText()), LocalDate.parse(Due.getText()),Integer.parseInt(projectID.getText()));
+            TaskDb.insertTask(name.getText(), Integer.parseInt(executorID.getText()), LocalDate.parse(deadline.getText()),Integer.parseInt(projectID.getText()));
         });
 
         cancelButton = new JButton("Cancel");
@@ -59,7 +59,7 @@ public class AddTask extends JPanel implements Serializable{
         Task t = new Task(name.getText());
         t.setExecutor(Integer.parseInt(executorID.getText()), personTableModel.getPersons());
         projectTableModel.addTask(t, Integer.parseInt(projectID.getText()));
-        t.finishDate = LocalDate.parse(Due.getText());
+        t.finishDate = LocalDate.parse(deadline.getText());
         return t;
     }
 

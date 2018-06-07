@@ -87,15 +87,24 @@ public class OwnFrame extends JFrame implements Serializable{
 				String name = inFile.getSelectedFile().getPath();
 				try (Scanner inf = new Scanner(Paths.get(name))) {
 
+
+					 while(inf.hasNextLine())
+				      {
+				        String[] line = inf.nextLine().split(";");
+				        personTableModel.addPerson(new Member(line[1], line[2], line[3]));
+						personTableModel.fireTableDataChanged();
+				      }
+					/*
 					inf.next();
 					int number = inf.nextInt();
 					inf.nextLine();
 					for (int i = 1; i <= number; i++) {
 						String[] line = inf.nextLine().split(";");
-						personTableModel.addPerson(new Member(line[1], line[2], line[3]));
+						personTableModel.addPerson(new Member(line[1], line[2],line[3]));
 						personTableModel.fireTableDataChanged();
-					}
-					
+					}	*/
+/*
+										
 					inf.next();
 					number = inf.nextInt();
 					inf.nextLine();
@@ -120,7 +129,7 @@ public class OwnFrame extends JFrame implements Serializable{
 						projectTableModel.getProjects().add(new Project(line[1], tasks));
 						projectTableModel.fireTableDataChanged();
 					}
-
+*/
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(OwnFrame.this, "Input file read failed!", "Import error",
 							JOptionPane.ERROR_MESSAGE);
@@ -131,6 +140,7 @@ public class OwnFrame extends JFrame implements Serializable{
 		JMenuItem importDB = new JMenuItem("Import DB");
 		importDB.addActionListener(event -> {
 			ImportFromDB();
+
 		});
 		JMenuItem exportItem = new JMenuItem("Export");
 		exportItem.addActionListener(event -> {
@@ -139,15 +149,12 @@ public class OwnFrame extends JFrame implements Serializable{
 			if (res == JFileChooser.APPROVE_OPTION) {
 				String name = outFile.getSelectedFile().getPath();
 				try (PrintWriter outf = new PrintWriter(name);) {
-					outf.println("Osoby: " + personTableModel.getPersons().size());
 					for (Member p : personTableModel.getPersons()) {
 						outf.println(p);
 					}
-					outf.println("Zadania: " + taskTableModel.getTasks().size());
 					for (Task t : taskTableModel.getTasks()) {
 						outf.println(t);
 					}
-					outf.println("Projekty: " + projectTableModel.getProjects().size());
 					for (Project p : projectTableModel.getProjects()) {
 						outf.println(p);
 					}
@@ -414,7 +421,7 @@ public class OwnFrame extends JFrame implements Serializable{
 				personTableModel.addPerson(new Member(rs.getString(2), rs.getString(3), rs.getString(4)));
 				personTableModel.fireTableDataChanged();
 			}
-			/*
+			
 			Statement stmt2 = con.createStatement();
 			String sql2 = "select * from tasks";
 			ResultSet rs2 = stmt.executeQuery(sql2);
@@ -448,7 +455,7 @@ public class OwnFrame extends JFrame implements Serializable{
 				projectTableModel.getProjects().add(new Project(rs3.getString(2), tasks));
 				projectTableModel.fireTableDataChanged();
 			}
-			*/
+			
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
