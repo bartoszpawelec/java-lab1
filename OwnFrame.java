@@ -95,6 +95,32 @@ public class OwnFrame extends JFrame implements Serializable{
 						personTableModel.addPerson(new Member(line[1], line[2], line[3]));
 						personTableModel.fireTableDataChanged();
 					}
+					
+					inf.next();
+					number = inf.nextInt();
+					inf.nextLine();
+					for (int i = 1; i <= number; i++) {
+						String[] line = inf.nextLine().split(";");
+						Member p = personTableModel.getPersons().get(Integer.parseInt(line[3]) - 1);
+						taskTableModel.addTask(new Task(line[1], p));
+						taskTableModel.fireTableDataChanged();
+					}
+
+					inf.next();
+					number = inf.nextInt();
+					inf.nextLine();
+					for (int i = 1; i <= number; i++) {
+						String[] line = inf.nextLine().split(";");
+						ArrayList<Task> tasks = new ArrayList<>();
+						for (int j = 0; j < Integer.parseInt(line[2]); j++) {
+							Task t = taskTableModel.getTasks().get(Integer.parseInt(line[3 + j * 4]) - 1);
+							tasks.add(t);
+						}
+
+						projectTableModel.getProjects().add(new Project(line[1], tasks));
+						projectTableModel.fireTableDataChanged();
+					}
+
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(OwnFrame.this, "Input file read failed!", "Import error",
 							JOptionPane.ERROR_MESSAGE);
@@ -325,6 +351,7 @@ public class OwnFrame extends JFrame implements Serializable{
 					Task t = addTaskDialog.getTask(projectTableModel, personTableModel);
 					taskTableModel.addTask(t);
 					taskTableModel.fireTableDataChanged();
+					projectTableModel.fireTableDataChanged();
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("Blad: Podaj ID projektu oraz osoby!");
@@ -387,7 +414,41 @@ public class OwnFrame extends JFrame implements Serializable{
 				personTableModel.addPerson(new Member(rs.getString(2), rs.getString(3), rs.getString(4)));
 				personTableModel.fireTableDataChanged();
 			}
+			/*
+			Statement stmt2 = con.createStatement();
+			String sql2 = "select * from tasks";
+			ResultSet rs2 = stmt.executeQuery(sql2);
+			while (rs2.next()) {
+				try {
+				Member p = personTableModel.getPersons().get(rs2.getInt(4) - 1);
+				
+				taskTableModel.addTask(new Task(rs.getString(2), p, rs.getString(3)));
+				taskTableModel.fireTableDataChanged();
+				}
+				catch (IndexOutOfBoundsException e) {
+					
+				}
+			}
 			
+			String sql3 = "select * from projects";
+			ResultSet rs3 = stmt.executeQuery(sql3);
+			while (rs3.next()) {
+				ArrayList<Task> tasks = new ArrayList<>();
+				String sql4 = "select id from tasks where project="+rs3.getInt(1);
+				ResultSet rs4 = stmt2.executeQuery(sql4);
+				while(rs4.next()) {
+					try {
+					Task t = taskTableModel.getTasks().get(rs4.getInt(1) - 1);
+					tasks.add(t);
+					}
+					catch (IndexOutOfBoundsException e) {
+						
+					}
+				}
+				projectTableModel.getProjects().add(new Project(rs3.getString(2), tasks));
+				projectTableModel.fireTableDataChanged();
+			}
+			*/
 		
 		} catch (SQLException e) {
 			e.printStackTrace();

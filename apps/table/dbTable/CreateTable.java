@@ -19,7 +19,7 @@ public class CreateTable {
 	static String CreateTasks = "CREATE TABLE IF NOT EXISTS tasks " 		+
             "(id INTEGER PRIMARY KEY AUTOINCREMENT					,"  +
             " name			      	CHAR(50)    				,"  +
-            " due       		    DATE				    ,"  +
+            " deadline       		    DATE				    ,"  +
             " executor				INT							,"	+ 
             " project				INT					)";
 	

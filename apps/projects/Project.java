@@ -72,8 +72,9 @@ public class Project extends Base implements Serializable {
 	interface GetAttr {
 		String attr();
 	}
-
-	private GetAttr[] attrs = new GetAttr[] { new GetAttr() {
+/*
+	private GetAttr[] attrs = new GetAttr[] { 
+	new GetAttr() {
 		public String attr() {
 			return Integer.toString(getId());
 		}
@@ -93,7 +94,24 @@ public class Project extends Base implements Serializable {
 			return executor.toString();
 		}
 	}};
+*/
+	
 
+    private GetAttr[] attrs = new GetAttr[] {
+            new GetAttr() { public String attr() { return Integer.toString(id);} },
+            new GetAttr() { public String attr() { return getTitle();} },
+            new GetAttr() { public String attr() {
+                String taskString = "";
+                for(Task t : tasks)
+                    taskString += ( t.id + ") " + t.getTitle() + " ");
+                return taskString;
+            } },
+            new GetAttr() {
+        		public String attr() {
+        			return executor.toString();
+        		}
+            }
+    };
 
 	public String attr(int index) {
 		return attrs[index].attr();

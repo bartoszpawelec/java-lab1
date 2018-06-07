@@ -14,7 +14,7 @@ public class Task extends Base implements Comparable<Task>, Serializable {
 	private Member executor;
 	public LocalDate finishDate;
 	private static int nextId = 1;
-	private int id;
+	public int id;
 	public ArrayList<Member> members;
 
 	public Task(String t) {
