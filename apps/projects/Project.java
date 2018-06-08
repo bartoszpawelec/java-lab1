@@ -27,6 +27,20 @@ public class Project extends Base implements Serializable {
 		id = nextId++;
 	}
 
+	public Project(String t,ArrayList<Member> members, ArrayList<Task> tasks) {
+		super(t);
+		this.tasks = tasks;
+		this.members = members;
+		id = nextId++;
+	}
+	
+	public Project(String t, Member m, ArrayList<Task> tasks) {
+		super(t);
+		this.tasks = tasks;
+		executor = m;
+		id = nextId++;
+	}
+	
 	public Project(String t, Member m)
 	{
 		super(t);
@@ -113,11 +127,11 @@ public class Project extends Base implements Serializable {
                     taskString += ( t.id + ") " + t.getTitle() + " ");
                 return taskString;
             } },
-            new GetAttr() {
-        		public String attr() {
-        			return executor.toString();
-        		}
-            }
+            new GetAttr() {public String attr() {
+            	String memberString = "";
+                memberString += executor.id+ ")" + executor.firstName;
+                return memberString;
+        	} }
     };
 
 	public String attr(int index) {

@@ -10,7 +10,7 @@ public class ProjectDb {
     static Connection connection;
     static Statement statement;
 
-    public static boolean insertProject(String name, int executor, int projectTasks) {
+    public static boolean insertProject(String name, int projectTasks, int executor) {
         try {
             try {
                 Class.forName("org.sqlite.JDBC");
@@ -21,7 +21,7 @@ public class ProjectDb {
             }
 
             statement = connection.createStatement();
-            String sql = "insert into projects (name, executor, projectTasks) values ('" + name + "', '" + executor + "', '"+ projectTasks+"')";
+            String sql = "insert into projects (name, projectTasks, executor) values ('" + name + "', '" + projectTasks + "', '"+ executor+"')";
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();

@@ -39,7 +39,7 @@ public class AddProject extends JPanel implements Serializable {
         saveButton.addActionListener(event -> {
             ok = true;
             dialog.setVisible(false);
-            ProjectDb.insertProject(title.getText(), Integer.parseInt(executorID.getText()),0);
+            ProjectDb.insertProject(title.getText(), 0, Integer.parseInt(executorID.getText()));
         });
 
         cancelButton = new JButton("Cancel");

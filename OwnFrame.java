@@ -422,7 +422,6 @@ public class OwnFrame extends JFrame implements Serializable{
 				personTableModel.fireTableDataChanged();
 			}
 			
-			Statement stmt2 = con.createStatement();
 			String sql2 = "select * from tasks";
 			ResultSet rs2 = stmt.executeQuery(sql2);
 			while (rs2.next()) {
@@ -436,23 +435,36 @@ public class OwnFrame extends JFrame implements Serializable{
 					
 				}
 			}
+			Statement stmt2 = con.createStatement();
+			Statement stmt3 = con.createStatement();
 			
 			String sql3 = "select * from projects";
 			ResultSet rs3 = stmt.executeQuery(sql3);
 			while (rs3.next()) {
 				ArrayList<Task> tasks = new ArrayList<>();
-				String sql4 = "select id from tasks where project="+rs3.getInt(1);
-				ResultSet rs4 = stmt2.executeQuery(sql4);
+				ArrayList<Member> members = new ArrayList<>();
+				//String sql4 = "select id from tasks where project="+rs3.getInt(1);
+				String sql5 = "select id from people where project="+rs3.getInt(1);
+				//ResultSet rs4 = stmt2.executeQuery(sql4);
+				ResultSet rs5 = stmt3.executeQuery(sql5);
+				/*
 				while(rs4.next()) {
 					try {
-					Task t = taskTableModel.getTasks().get(rs4.getInt(1) - 1);
-					tasks.add(t);
+						Task t = taskTableModel.getTasks().get(rs4.getInt(1) - 1);
+						tasks.add(t);
+					}catch (IndexOutOfBoundsException e) {
 					}
-					catch (IndexOutOfBoundsException e) {
+				}*/
+				while(rs5.next()) {
+					try {
+						Member m = personTableModel.getPersons().get(rs5.getInt(4) - 1);	
+						members.add(m);		
+					}catch(IndexOutOfBoundsException e) {
 						
 					}
+					
 				}
-				projectTableModel.getProjects().add(new Project(rs3.getString(2), tasks));
+				projectTableModel.addProject(new Project(rs3.getString(2), members, tasks));
 				projectTableModel.fireTableDataChanged();
 			}
 			

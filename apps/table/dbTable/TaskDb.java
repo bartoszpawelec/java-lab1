@@ -20,7 +20,7 @@ public class TaskDb {
             }
 
             statement = connection.createStatement();
-            String sql = "insert into tasks (name, executor, deadline, project) values ('" + name + "', '" + executor + "', '" + deadline + "', '" + project +"')" ;
+            String sql = "insert into tasks (name, deadline, executor, project) values ('" + name + "', '" + deadline + "', '" + executor + "', '" + project +"')" ;
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
